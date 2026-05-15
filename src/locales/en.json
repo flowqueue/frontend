@@ -1,3 +1,64 @@
 {
-
+  "common": {
+    "appName": "FlowQueue",
+    "loading": "Loading...",
+    "search": "Search",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "details": "Details",
+    "reprogram": "Reschedule",
+    "download": "Download",
+    "share": "Share",
+    "logout": "Log out",
+    "settings": "Settings",
+    "notifications": "Notifications"
+  },
+  "sidebar": {
+    "mainMenu": "Main menu",
+    "configuration": "Configuration",
+    "admin": "Administrator",
+    "operator": "Operator",
+    "citizen": "Citizen",
+    "home": "Home",
+    "myTurns": "My tickets",
+    "searchEntity": "Search entity",
+    "notifications": "Notifications",
+    "history": "History",
+    "settings": "Settings",
+    "myCounter": "My counter",
+    "activeQueue": "Active queue",
+    "pause": "Pause",
+    "statistics": "Statistics",
+    "dashboard": "Dashboard",
+    "analytics": "Analytics",
+    "branches": "Branches",
+    "services": "Services",
+    "operators": "Operators",
+    "reports": "Reports"
+  },
+  "topbar": {
+    "profile": "Profile",
+    "goSettings": "Go to settings",
+    "goNotifications": "View notifications"
+  },
+  "login": {
+    "title": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "button": "Log in",
+    "register": "Create account"
+  },
+  "dashboard": {
+    "goodMorning": "Good morning",
+    "waiting": "Waiting",
+    "servedToday": "Served today",
+    "avgWait": "Avg. waiting time",
+    "satisfaction": "Satisfaction",
+    "turnsByHour": "Tickets served by hour",
+    "operatorPerformance": "Operator performance",
+    "dayHistory": "Daily history",
+    "noRecords": "No records",
+    "noOperators": "No operators"
+  }
 }

@@ -1,3 +1,64 @@
 {
-
+  "common": {
+    "appName": "FlowQueue",
+    "loading": "Cargando...",
+    "search": "Buscar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "details": "Detalle",
+    "reprogram": "Reprogramar",
+    "download": "Descargar",
+    "share": "Compartir",
+    "logout": "Cerrar sesión",
+    "settings": "Ajustes",
+    "notifications": "Notificaciones"
+  },
+  "sidebar": {
+    "mainMenu": "Menú principal",
+    "configuration": "Configuración",
+    "admin": "Administrador",
+    "operator": "Operador",
+    "citizen": "Ciudadano",
+    "home": "Inicio",
+    "myTurns": "Mis turnos",
+    "searchEntity": "Buscar entidad",
+    "notifications": "Notificaciones",
+    "history": "Historial",
+    "settings": "Ajustes",
+    "myCounter": "Mi ventanilla",
+    "activeQueue": "Cola activa",
+    "pause": "Pausar",
+    "statistics": "Estadísticas",
+    "dashboard": "Dashboard",
+    "analytics": "Analítica",
+    "branches": "Sedes",
+    "services": "Servicios",
+    "operators": "Operadores",
+    "reports": "Reportes"
+  },
+  "topbar": {
+    "profile": "Perfil",
+    "goSettings": "Ir a ajustes",
+    "goNotifications": "Ver notificaciones"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "email": "Correo",
+    "password": "Contraseña",
+    "button": "Ingresar",
+    "register": "Crear cuenta"
+  },
+  "dashboard": {
+    "goodMorning": "Buenos días",
+    "waiting": "En espera",
+    "servedToday": "Atendidos hoy",
+    "avgWait": "T. espera prom.",
+    "satisfaction": "Satisfacción",
+    "turnsByHour": "Turnos atendidos por hora",
+    "operatorPerformance": "Rendimiento de operadores",
+    "dayHistory": "Historial del día",
+    "noRecords": "Sin registros",
+    "noOperators": "Sin operadores"
+  }
 }

@@ -1,0 +1,868 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "nombre": "Carlos Mendoza",
+      "email": "carlos@flowqueue.pe",
+      "password": "123456",
+      "rol": "operator",
+      "mostradorId": 1,
+      "sedeId": 1
+    },
+    {
+      "id": "2",
+      "nombre": "Lucía Quispe",
+      "email": "lucia@flowqueue.pe",
+      "password": "123456",
+      "rol": "operator",
+      "mostradorId": 2,
+      "sedeId": 1
+    },
+    {
+      "id": "3",
+      "nombre": "Roberto Salas",
+      "email": "roberto@flowqueue.pe",
+      "password": "123456",
+      "rol": "operator",
+      "mostradorId": 3,
+      "sedeId": 1
+    },
+    {
+      "id": "4",
+      "nombre": "Ana Torres",
+      "email": "ana@flowqueue.pe",
+      "password": "123456",
+      "rol": "supervisor",
+      "sedeId": 1
+    },
+    {
+      "id": "5",
+      "nombre": "Miguel Flores",
+      "email": "miguel@flowqueue.pe",
+      "password": "123456",
+      "rol": "supervisor",
+      "sedeId": 2
+    },
+    {
+      "id": "6",
+      "nombre": "Alexander M.",
+      "email": "alex@flowqueue.pe",
+      "password": "123456",
+      "rol": "citizen",
+      "dni": "76543210",
+      "sedeId": 1
+    }
+  ],
+  "instituciones": [
+    {
+      "id": "1",
+      "nombre": "RENIEC",
+      "descripcion": "Registro Nacional de Identificación y Estado Civil",
+      "tipo": "Documentos"
+    },
+    {
+      "id": "2",
+      "nombre": "EsSalud",
+      "descripcion": "Seguro Social de Salud del Perú",
+      "tipo": "Salud"
+    },
+    {
+      "id": "3",
+      "nombre": "Banco de la Nación",
+      "descripcion": "Banco estatal de servicios financieros",
+      "tipo": "Bancario"
+    },
+    {
+      "id": "4",
+      "nombre": "SUNAT",
+      "descripcion": "Superintendencia Nacional de Aduanas y Administración Tributaria",
+      "tipo": "Tributario"
+    },
+    {
+      "id": "5",
+      "nombre": "Municipalidad Lima",
+      "descripcion": "Servicios municipales",
+      "tipo": "Municipal"
+    },
+    {
+      "id": "6",
+      "nombre": "Migraciones",
+      "descripcion": "Superintendencia Nacional de Migraciones",
+      "tipo": "Documentos"
+    }
+  ],
+  "sedes": [
+    {
+      "id": "1",
+      "institucionId": 1,
+      "nombre": "RENIEC Miraflores",
+      "direccion": "Av. Larco 1234",
+      "distrito": "Miraflores",
+      "horario": "08:00 - 17:00"
+    },
+    {
+      "id": "2",
+      "institucionId": 1,
+      "nombre": "RENIEC San Isidro",
+      "direccion": "Av. Rivera Navarrete 456",
+      "distrito": "San Isidro",
+      "horario": "08:00 - 17:00"
+    },
+    {
+      "id": "3",
+      "institucionId": 2,
+      "nombre": "EsSalud Lima Norte",
+      "direccion": "Av. Universitaria 890",
+      "distrito": "Los Olivos",
+      "horario": "07:00 - 19:00"
+    },
+    {
+      "id": "4",
+      "institucionId": 3,
+      "nombre": "BN San Miguel",
+      "direccion": "Av. La Marina 2100",
+      "distrito": "San Miguel",
+      "horario": "09:00 - 16:00"
+    },
+    {
+      "id": "5",
+      "institucionId": 4,
+      "nombre": "SUNAT San Isidro",
+      "direccion": "Av. Javier Prado 1472",
+      "distrito": "San Isidro",
+      "horario": "08:30 - 16:30"
+    },
+    {
+      "id": "6",
+      "institucionId": 5,
+      "nombre": "Municipalidad de Lima Centro",
+      "direccion": "Jr. de la Unión 300",
+      "distrito": "Lima Centro",
+      "horario": "08:00 - 17:00"
+    },
+    {
+      "id": "7",
+      "institucionId": 6,
+      "nombre": "Migraciones Breña",
+      "direccion": "Av. España 734",
+      "distrito": "Breña",
+      "horario": "08:00 - 17:00"
+    }
+  ],
+  "servicios": [
+    {
+      "id": "1",
+      "sedeId": 1,
+      "nombre": "Renovación de DNI",
+      "duracionPromedio": 12,
+      "prefijo": "A"
+    },
+    {
+      "id": "2",
+      "sedeId": 1,
+      "nombre": "Primera emisión de DNI",
+      "duracionPromedio": 20,
+      "prefijo": "B"
+    },
+    {
+      "id": "3",
+      "sedeId": 1,
+      "nombre": "Duplicado de DNI",
+      "duracionPromedio": 8,
+      "prefijo": "C"
+    },
+    {
+      "id": "4",
+      "sedeId": 2,
+      "nombre": "Renovación de DNI",
+      "duracionPromedio": 10,
+      "prefijo": "A"
+    },
+    {
+      "id": "5",
+      "sedeId": 2,
+      "nombre": "Rectificación de datos",
+      "duracionPromedio": 25,
+      "prefijo": "B"
+    },
+    {
+      "id": "6",
+      "sedeId": 3,
+      "nombre": "Cita médica",
+      "duracionPromedio": 18,
+      "prefijo": "E"
+    },
+    {
+      "id": "7",
+      "sedeId": 4,
+      "nombre": "Pago de deuda",
+      "duracionPromedio": 15,
+      "prefijo": "N"
+    },
+    {
+      "id": "8",
+      "sedeId": 5,
+      "nombre": "Consulta RUC",
+      "duracionPromedio": 12,
+      "prefijo": "D"
+    },
+    {
+      "id": "9",
+      "sedeId": 6,
+      "nombre": "Licencia municipal",
+      "duracionPromedio": 20,
+      "prefijo": "M"
+    },
+    {
+      "id": "10",
+      "sedeId": 7,
+      "nombre": "Pasaporte",
+      "duracionPromedio": 16,
+      "prefijo": "P"
+    }
+  ],
+  "mostradores": [
+    {
+      "id": "1",
+      "sedeId": 1,
+      "numero": 1,
+      "servicioId": 1,
+      "estado": "activo",
+      "operadorId": 1,
+      "operadorNombre": "Carlos Mendoza"
+    },
+    {
+      "id": "2",
+      "sedeId": 1,
+      "numero": 2,
+      "servicioId": 1,
+      "estado": "activo",
+      "operadorId": 2,
+      "operadorNombre": "Lucía Quispe"
+    },
+    {
+      "id": "3",
+      "sedeId": 1,
+      "numero": 3,
+      "servicioId": 2,
+      "estado": "activo",
+      "operadorId": 3,
+      "operadorNombre": "Roberto Salas"
+    },
+    {
+      "id": "4",
+      "sedeId": 1,
+      "numero": 4,
+      "servicioId": 3,
+      "estado": "inactivo",
+      "operadorId": null,
+      "operadorNombre": null
+    },
+    {
+      "id": "5",
+      "sedeId": 2,
+      "numero": 1,
+      "servicioId": 4,
+      "estado": "activo",
+      "operadorId": null,
+      "operadorNombre": null
+    },
+    {
+      "id": "6",
+      "sedeId": 2,
+      "numero": 2,
+      "servicioId": 5,
+      "estado": "activo",
+      "operadorId": null,
+      "operadorNombre": null
+    }
+  ],
+  "turnos": [
+    {
+      "id": "1",
+      "codigo": "A-001",
+      "ciudadanoNombre": "Juan García Pérez",
+      "ciudadanoDNI": "48291034",
+      "servicioId": 1,
+      "mostradorId": 1,
+      "sedeId": 1,
+      "estado": "atendido",
+      "horaIngreso": "2026-05-14T08:30:00",
+      "horaLlamado": "2026-05-14T09:14:00",
+      "horaFin": "2026-05-15T00:13:45.401Z"
+    },
+    {
+      "id": "2",
+      "codigo": "A-002",
+      "ciudadanoNombre": "María López Sánchez",
+      "ciudadanoDNI": "52834901",
+      "servicioId": 1,
+      "mostradorId": "1",
+      "sedeId": 1,
+      "estado": "en_atencion",
+      "horaIngreso": "2026-05-14T08:45:00",
+      "horaLlamado": "2026-05-15T00:13:46.461Z",
+      "horaFin": null
+    },
+    {
+      "id": "3",
+      "codigo": "A-003",
+      "ciudadanoNombre": "Pedro Rojas Ticona",
+      "ciudadanoDNI": "61029384",
+      "servicioId": 1,
+      "mostradorId": "1",
+      "sedeId": 1,
+      "estado": "atendido",
+      "horaIngreso": "2026-05-14T08:52:00",
+      "horaLlamado": "2026-05-15T01:40:49.138Z",
+      "horaFin": "2026-05-15T01:40:55.940Z"
+    },
+    {
+      "id": "4",
+      "codigo": "A-004",
+      "ciudadanoNombre": "Carmen Vega Huanca",
+      "ciudadanoDNI": "73829401",
+      "servicioId": 1,
+      "mostradorId": "1",
+      "sedeId": 1,
+      "estado": "ausente",
+      "horaIngreso": "2026-05-14T09:01:00",
+      "horaLlamado": "2026-05-15T01:41:01.398Z",
+      "horaFin": "2026-05-15T01:41:02.665Z"
+    },
+    {
+      "id": "5",
+      "codigo": "A-005",
+      "ciudadanoNombre": "Luis Mamani Ccoa",
+      "ciudadanoDNI": "80293746",
+      "servicioId": 1,
+      "mostradorId": "1",
+      "sedeId": 1,
+      "estado": "ausente",
+      "horaIngreso": "2026-05-14T09:08:00",
+      "horaLlamado": "2026-05-15T04:56:54.380Z",
+      "horaFin": "2026-05-15T04:56:57.876Z"
+    },
+    {
+      "id": "6",
+      "codigo": "A-006",
+      "ciudadanoNombre": "Rosa Flores Cueva",
+      "ciudadanoDNI": "94738201",
+      "servicioId": 1,
+      "mostradorId": "1",
+      "sedeId": 1,
+      "estado": "atendido",
+      "horaIngreso": "2026-05-14T09:12:00",
+      "horaLlamado": "2026-05-15T04:57:00.144Z",
+      "horaFin": "2026-05-15T04:57:01.816Z"
+    },
+    {
+      "id": "7",
+      "codigo": "A-007",
+      "ciudadanoNombre": "Jorge Quispe Apaza",
+      "ciudadanoDNI": "10293847",
+      "servicioId": 1,
+      "mostradorId": "1",
+      "sedeId": 1,
+      "estado": "en_atencion",
+      "horaIngreso": "2026-05-14T09:18:00",
+      "horaLlamado": "2026-05-15T22:15:04.875Z",
+      "horaFin": null
+    },
+    {
+      "id": "8",
+      "codigo": "A-008",
+      "ciudadanoNombre": "Elena Condori Puma",
+      "ciudadanoDNI": "20938471",
+      "servicioId": 1,
+      "mostradorId": "1",
+      "sedeId": 1,
+      "estado": "ausente",
+      "horaIngreso": "2026-05-14T09:25:00",
+      "horaLlamado": "2026-05-15T22:15:07.651Z",
+      "horaFin": "2026-05-15T22:15:12.917Z"
+    },
+    {
+      "id": "9",
+      "codigo": "A-010",
+      "ciudadanoNombre": "Raúl Mendoza Chávez",
+      "ciudadanoDNI": "38291047",
+      "servicioId": 1,
+      "mostradorId": 1,
+      "sedeId": 1,
+      "estado": "atendido",
+      "horaIngreso": "2026-05-14T08:00:00",
+      "horaLlamado": "2026-05-14T08:05:00",
+      "horaFin": "2026-05-14T08:19:00"
+    },
+    {
+      "id": "10",
+      "codigo": "A-011",
+      "ciudadanoNombre": "Sofía Tapia Herrera",
+      "ciudadanoDNI": "49201837",
+      "servicioId": 1,
+      "mostradorId": 1,
+      "sedeId": 1,
+      "estado": "atendido",
+      "horaIngreso": "2026-05-14T08:10:00",
+      "horaLlamado": "2026-05-14T08:21:00",
+      "horaFin": "2026-05-14T08:38:00"
+    },
+    {
+      "id": "11",
+      "codigo": "A-012",
+      "ciudadanoNombre": "Andrés Paredes Lazo",
+      "ciudadanoDNI": "57392018",
+      "servicioId": 1,
+      "mostradorId": 1,
+      "sedeId": 1,
+      "estado": "ausente",
+      "horaIngreso": "2026-05-14T08:15:00",
+      "horaLlamado": "2026-05-14T08:40:00",
+      "horaFin": "2026-05-14T08:43:00"
+    },
+    {
+      "id": "12",
+      "codigo": "A-013",
+      "ciudadanoNombre": "Gloria Neyra Palomino",
+      "ciudadanoDNI": "62017493",
+      "servicioId": 1,
+      "mostradorId": 1,
+      "sedeId": 1,
+      "estado": "atendido",
+      "horaIngreso": "2026-05-14T08:20:00",
+      "horaLlamado": "2026-05-14T08:45:00",
+      "horaFin": "2026-05-14T09:01:00"
+    },
+    {
+      "id": "13",
+      "codigo": "B-001",
+      "ciudadanoNombre": "Hector Vásquez Torres",
+      "ciudadanoDNI": "71829304",
+      "servicioId": 2,
+      "mostradorId": 3,
+      "sedeId": 1,
+      "estado": "en_atencion",
+      "horaIngreso": "2026-05-14T08:40:00",
+      "horaLlamado": "2026-05-14T09:10:00",
+      "horaFin": null
+    },
+    {
+      "id": "14",
+      "codigo": "B-002",
+      "ciudadanoNombre": "Norma Castro Zevallos",
+      "ciudadanoDNI": "83920174",
+      "servicioId": 2,
+      "mostradorId": null,
+      "sedeId": 1,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-14T08:55:00",
+      "horaLlamado": null,
+      "horaFin": null
+    },
+    {
+      "id": "15",
+      "codigo": "B-003",
+      "ciudadanoNombre": "Dante Ramos Ccallo",
+      "ciudadanoDNI": "90182734",
+      "servicioId": 2,
+      "mostradorId": null,
+      "sedeId": 1,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-14T09:05:00",
+      "horaLlamado": null,
+      "horaFin": null
+    },
+    {
+      "id": "16",
+      "codigo": "B-004",
+      "ciudadanoNombre": "Iris Meza Pinto",
+      "ciudadanoDNI": "12837490",
+      "servicioId": 2,
+      "mostradorId": null,
+      "sedeId": 1,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-14T09:20:00",
+      "horaLlamado": null,
+      "horaFin": null
+    },
+    {
+      "id": "17",
+      "codigo": "C-001",
+      "ciudadanoNombre": "Felix Arce Soto",
+      "ciudadanoDNI": "23948017",
+      "servicioId": 3,
+      "mostradorId": null,
+      "sedeId": 1,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-14T09:00:00",
+      "horaLlamado": null,
+      "horaFin": null
+    },
+    {
+      "id": "18",
+      "codigo": "C-002",
+      "ciudadanoNombre": "Sandra Lara Ito",
+      "ciudadanoDNI": "34017928",
+      "servicioId": 3,
+      "mostradorId": null,
+      "sedeId": 1,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-14T09:15:00",
+      "horaLlamado": null,
+      "horaFin": null
+    },
+    {
+      "id": "100",
+      "codigo": "A-047",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 1,
+      "mostradorId": "1",
+      "sedeId": 1,
+      "estado": "en_atencion",
+      "horaIngreso": "2026-05-14T10:42:00",
+      "horaLlamado": "2026-05-15T22:15:45.368Z",
+      "horaFin": null
+    },
+    {
+      "id": "101",
+      "codigo": "B-023",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 6,
+      "mostradorId": 2,
+      "sedeId": 3,
+      "estado": "atendido",
+      "horaIngreso": "2026-04-08T09:00:00",
+      "horaLlamado": "2026-04-08T09:32:00",
+      "horaFin": "2026-04-08T09:45:00"
+    },
+    {
+      "id": "102",
+      "codigo": "C-156",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 7,
+      "mostradorId": 1,
+      "sedeId": 4,
+      "estado": "cancelado",
+      "horaIngreso": "2026-04-01T11:10:00",
+      "horaLlamado": null,
+      "horaFin": "2026-04-01T11:20:00"
+    },
+    {
+      "codigo": "A-014",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 1,
+      "mostradorId": "1",
+      "sedeId": 1,
+      "estado": "en_atencion",
+      "horaIngreso": "2026-05-15T20:07:57.641Z",
+      "horaLlamado": "2026-05-15T22:16:03.864Z",
+      "horaFin": null,
+      "id": "snsZZ_AILAk"
+    },
+    {
+      "codigo": "E-002",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 6,
+      "mostradorId": null,
+      "sedeId": 3,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T20:08:32.349Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "sqMDR0o3TDE"
+    },
+    {
+      "codigo": "N-002",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 7,
+      "mostradorId": null,
+      "sedeId": 4,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T20:08:34.096Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "wuQDX3XGqGE"
+    },
+    {
+      "codigo": "P-001",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 10,
+      "mostradorId": null,
+      "sedeId": 7,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T20:08:34.990Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "AhlIVU6cf8c"
+    },
+    {
+      "codigo": "M-001",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 9,
+      "mostradorId": null,
+      "sedeId": 6,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T20:08:35.817Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "48XTgkmr9jo"
+    },
+    {
+      "codigo": "D-001",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 8,
+      "mostradorId": null,
+      "sedeId": 5,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T20:08:37.666Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "tcU7CVpX1j8"
+    },
+    {
+      "codigo": "A-015",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 1,
+      "mostradorId": null,
+      "sedeId": 1,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T20:09:33.206Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "UGAa1Kz699A"
+    },
+    {
+      "codigo": "E-003",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 6,
+      "mostradorId": null,
+      "sedeId": 3,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T20:09:34.073Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "3OEJqwuBULI"
+    },
+    {
+      "codigo": "A-016",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 1,
+      "mostradorId": null,
+      "sedeId": 1,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T20:10:15.188Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "ICH1-C9nMWM"
+    },
+    {
+      "codigo": "N-003",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 7,
+      "mostradorId": null,
+      "sedeId": 4,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T20:10:24.790Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "I-apTIfKzU8"
+    },
+    {
+      "codigo": "A-017",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 1,
+      "mostradorId": null,
+      "sedeId": 1,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T20:11:10.774Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "4j_OlI78WoQ"
+    },
+    {
+      "codigo": "A-018",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 1,
+      "mostradorId": null,
+      "sedeId": 1,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T22:07:19.429Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "AlRnGjiavE4"
+    },
+    {
+      "codigo": "E-004",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 6,
+      "mostradorId": null,
+      "sedeId": 3,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T22:07:21.336Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "H5V0hkc7lbs"
+    },
+    {
+      "codigo": "A-019",
+      "ciudadanoNombre": "Alexander M.",
+      "ciudadanoDNI": "76543210",
+      "servicioId": 1,
+      "mostradorId": null,
+      "sedeId": 1,
+      "estado": "en_espera",
+      "horaIngreso": "2026-05-15T22:11:34.109Z",
+      "horaLlamado": null,
+      "horaFin": null,
+      "id": "2Bn085mDbVs"
+    }
+  ],
+  "metricas_horarias": [
+    {
+      "id": "1",
+      "sedeId": 1,
+      "fecha": "2026-05-14",
+      "hora": 8,
+      "atendidos": 9,
+      "ausentes": 1,
+      "tiempoPromedioMin": 13.2
+    },
+    {
+      "id": "2",
+      "sedeId": 1,
+      "fecha": "2026-05-14",
+      "hora": 9,
+      "atendidos": 24,
+      "ausentes": 3,
+      "tiempoPromedioMin": 14.8
+    },
+    {
+      "id": "3",
+      "sedeId": 1,
+      "fecha": "2026-05-14",
+      "hora": 10,
+      "atendidos": 31,
+      "ausentes": 2,
+      "tiempoPromedioMin": 12.1
+    },
+    {
+      "id": "4",
+      "sedeId": 1,
+      "fecha": "2026-05-14",
+      "hora": 11,
+      "atendidos": 28,
+      "ausentes": 4,
+      "tiempoPromedioMin": 15.3
+    },
+    {
+      "id": "5",
+      "sedeId": 1,
+      "fecha": "2026-05-14",
+      "hora": 12,
+      "atendidos": 19,
+      "ausentes": 2,
+      "tiempoPromedioMin": 11.9
+    },
+    {
+      "id": "6",
+      "sedeId": 1,
+      "fecha": "2026-05-14",
+      "hora": 13,
+      "atendidos": 12,
+      "ausentes": 1,
+      "tiempoPromedioMin": 13.5
+    },
+    {
+      "id": "7",
+      "sedeId": 2,
+      "fecha": "2026-05-14",
+      "hora": 8,
+      "atendidos": 7,
+      "ausentes": 0,
+      "tiempoPromedioMin": 11
+    },
+    {
+      "id": "8",
+      "sedeId": 2,
+      "fecha": "2026-05-14",
+      "hora": 9,
+      "atendidos": 18,
+      "ausentes": 2,
+      "tiempoPromedioMin": 12.4
+    },
+    {
+      "id": "9",
+      "sedeId": 2,
+      "fecha": "2026-05-14",
+      "hora": 10,
+      "atendidos": 22,
+      "ausentes": 1,
+      "tiempoPromedioMin": 10.8
+    },
+    {
+      "id": "10",
+      "sedeId": 2,
+      "fecha": "2026-05-14",
+      "hora": 11,
+      "atendidos": 20,
+      "ausentes": 3,
+      "tiempoPromedioMin": 13.7
+    },
+    {
+      "id": "11",
+      "sedeId": 2,
+      "fecha": "2026-05-14",
+      "hora": 12,
+      "atendidos": 15,
+      "ausentes": 1,
+      "tiempoPromedioMin": 12.2
+    },
+    {
+      "id": "12",
+      "sedeId": 2,
+      "fecha": "2026-05-14",
+      "hora": 13,
+      "atendidos": 8,
+      "ausentes": 0,
+      "tiempoPromedioMin": 11.5
+    }
+  ],
+  "notificaciones": [
+    {
+      "id": "1",
+      "userId": "6",
+      "title": "Tu turno está próximo",
+      "message": "A-047 será llamado en aproximadamente 10 minutos.",
+      "type": "info",
+      "createdAt": "2026-05-14T10:55:00",
+      "read": false
+    },
+    {
+      "id": "2",
+      "userId": "6",
+      "title": "Retraso detectado",
+      "message": "Hay un retraso de ~10 min en RENIEC Miraflores.",
+      "type": "warning",
+      "createdAt": "2026-05-14T10:45:00",
+      "read": false
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
