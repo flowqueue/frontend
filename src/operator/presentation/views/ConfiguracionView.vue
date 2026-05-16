@@ -4,7 +4,9 @@ import AppLayout from '@/shared/components/AppLayout.vue'
 import { useAuthStore } from '@/iam/application/auth.store.js'
 import { useOperatorStore } from '@/operator/application/Operation.Store.js'
 import { http } from '@/shared/services/http.js'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const auth     = useAuthStore()
 const operator = useOperatorStore()
 const currentPassword = ref('')
@@ -13,7 +15,7 @@ const confirmPassword = ref('')
 const feedback = ref('')
 const error = ref('')
 const saving = ref(false)
-const roleText = computed(() => auth.user?.isSupervisor ? 'Supervisor' : auth.user?.isOperator ? 'Operador' : 'Ciudadano')
+const roleText = computed(() => auth.user?.isSupervisor ? t('sidebar.supervisor') : auth.user?.isOperator ? t('sidebar.operator') : t('sidebar.citizen'))
 
 onMounted(() => {
   if (auth.user?.mostradorId) operator.loadDashboard(auth.user.mostradorId)
@@ -23,15 +25,15 @@ async function updatePassword() {
   error.value = ''
   feedback.value = ''
   if (!currentPassword.value || !newPassword.value || !confirmPassword.value) {
-    error.value = 'Completa todos los campos de contraseña.'
+    error.value = t('settings.completePasswords')
     return
   }
   if (newPassword.value.length < 6) {
-    error.value = 'La nueva contraseña debe tener al menos 6 caracteres.'
+    error.value = t('settings.passwordLength')
     return
   }
   if (newPassword.value !== confirmPassword.value) {
-    error.value = 'La confirmación no coincide con la nueva contraseña.'
+    error.value = t('settings.passwordMismatch')
     return
   }
   saving.value = true
@@ -39,14 +41,14 @@ async function updatePassword() {
     const users = await http.get(`/usuarios?email=${encodeURIComponent(auth.user.email)}`)
     const user = users[0]
     if (!user || user.password !== currentPassword.value) {
-      error.value = 'La contraseña actual no es correcta.'
+      error.value = t('settings.wrongPassword')
       return
     }
     await http.patch(`/usuarios/${user.id}`, { password: newPassword.value })
     currentPassword.value = ''
     newPassword.value = ''
     confirmPassword.value = ''
-    feedback.value = 'Contraseña actualizada correctamente.'
+    feedback.value = t('settings.passwordUpdated')
   } finally {
     saving.value = false
   }
@@ -57,41 +59,41 @@ async function updatePassword() {
   <AppLayout title="Configuración" subtitle="Perfil y preferencias de tu cuenta">
     <div class="config-grid">
       <section class="card config-card">
-        <div class="config-header"><h2>Perfil de usuario</h2></div>
+        <div class="config-header"><h2>{{ t('settings.userProfile') }}</h2></div>
         <div class="config-body">
           <div class="avatar-big">{{ auth.user?.nombre?.charAt(0) }}</div>
           <div class="field-group">
-            <div class="field"><label>Nombre completo</label><input type="text" :value="auth.user?.nombre" readonly /></div>
-            <div class="field"><label>Correo electrónico</label><input type="email" :value="auth.user?.email" readonly /></div>
-            <div class="field"><label>Rol</label><input type="text" :value="roleText" readonly /></div>
+            <div class="field"><label>{{ t('common.name') }}</label><input type="text" :value="auth.user?.nombre" readonly /></div>
+            <div class="field"><label>{{ t('settings.email') }}</label><input type="email" :value="auth.user?.email" readonly /></div>
+            <div class="field"><label>{{ t('common.role') }}</label><input type="text" :value="roleText" readonly /></div>
           </div>
         </div>
       </section>
 
       <section class="card config-card">
-        <div class="config-header"><h2>Ventana asignada</h2></div>
+        <div class="config-header"><h2>{{ t('settings.assignedCounter') }}</h2></div>
         <div class="config-body">
           <div class="window-info">
             <div class="window-num">{{ operator.mostrador?.numero ?? '--' }}</div>
             <div class="window-detail">
-              <p class="window-service">{{ operator.mostrador?.servicioNombre ?? 'No aplica' }}</p>
-              <p class="window-sede">{{ operator.mostrador?.sedeNombre ?? 'Cuenta ciudadana/supervisor' }}</p>
-              <span class="badge" :class="operator.mostrador ? 'badge-green' : 'badge-gray'">{{ operator.mostrador ? 'Activo' : 'Sin asignar' }}</span>
+              <p class="window-service">{{ operator.mostrador?.servicioNombre ?? t('settings.notApplicable') }}</p>
+              <p class="window-sede">{{ operator.mostrador?.sedeNombre ?? t('settings.citizenSupervisorAccount') }}</p>
+              <span class="badge" :class="operator.mostrador ? 'badge-green' : 'badge-gray'">{{ operator.mostrador ? t('common.active') : t('common.unassigned') }}</span>
             </div>
           </div>
         </div>
       </section>
 
       <section class="card config-card">
-        <div class="config-header"><h2>Seguridad</h2></div>
+        <div class="config-header"><h2>{{ t('settings.security') }}</h2></div>
         <div class="config-body">
           <p v-if="feedback" class="feedback">{{ feedback }}</p>
           <p v-if="error" class="error-msg">{{ error }}</p>
           <form class="field-group" @submit.prevent="updatePassword">
-            <div class="field"><label>Contraseña actual</label><input v-model="currentPassword" type="password" placeholder="••••••••" /></div>
-            <div class="field"><label>Nueva contraseña</label><input v-model="newPassword" type="password" placeholder="Mínimo 6 caracteres" /></div>
-            <div class="field"><label>Confirmar nueva contraseña</label><input v-model="confirmPassword" type="password" placeholder="Repite la nueva contraseña" /></div>
-            <button class="save-btn" :disabled="saving">{{ saving ? 'Actualizando...' : 'Actualizar contraseña' }}</button>
+            <div class="field"><label>{{ t('settings.currentPassword') }}</label><input v-model="currentPassword" type="password" placeholder="••••••••" /></div>
+            <div class="field"><label>{{ t('settings.newPassword') }}</label><input v-model="newPassword" type="password"  :placeholder="t('settings.min6')" /></div>
+            <div class="field"><label>{{ t('settings.confirmPassword') }}</label><input v-model="confirmPassword" type="password"  :placeholder="t('settings.repeatPassword')" /></div>
+            <button class="save-btn" :disabled="saving">{{ saving ? t('settings.updating') : t('settings.updatePassword') }}</button>
           </form>
         </div>
       </section>

@@ -132,14 +132,14 @@ async function deleteUser(user) {
           <table class="data-table">
             <thead><tr><th>Usuario</th><th>Rol</th><th>Sede</th><th>Mostrador</th><th>Acciones</th></tr></thead>
             <tbody>
-            <tr v-for="u in filteredUsers" :key="u.id">
-              <td><strong>{{ u.nombre }}</strong><br><span class="td-muted">{{ u.email }}</span></td>
-              <td><span class="badge" :class="u.rol === 'operator' ? 'badge-blue' : 'badge-green'">{{ u.rol === 'operator' ? 'Operador' : 'Supervisor' }}</span></td>
-              <td class="td-muted">{{ sedeName(u.sedeId) }}</td>
-              <td class="td-muted">{{ u.rol === 'operator' ? mostradorName(u.mostradorId) : 'No aplica' }}</td>
-              <td><button class="pill-danger" @click="deleteUser(u)">Eliminar</button></td>
-            </tr>
-            <tr v-if="!filteredUsers.length"><td colspan="5" class="empty-cell">No hay usuarios con esos filtros</td></tr>
+              <tr v-for="u in filteredUsers" :key="u.id">
+                <td><strong>{{ u.nombre }}</strong><br><span class="td-muted">{{ u.email }}</span></td>
+                <td><span class="badge" :class="u.rol === 'operator' ? 'badge-blue' : 'badge-green'">{{ u.rol === 'operator' ? 'Operador' : 'Supervisor' }}</span></td>
+                <td class="td-muted">{{ sedeName(u.sedeId) }}</td>
+                <td class="td-muted">{{ u.rol === 'operator' ? mostradorName(u.mostradorId) : 'No aplica' }}</td>
+                <td><button class="pill-danger" @click="deleteUser(u)">Eliminar</button></td>
+              </tr>
+              <tr v-if="!filteredUsers.length"><td colspan="5" class="empty-cell">No hay usuarios con esos filtros</td></tr>
             </tbody>
           </table>
         </div>

@@ -5,9 +5,11 @@ import AppLayout from '@/shared/components/AppLayout.vue'
 import { useAuthStore } from '@/iam/application/auth.store.js'
 import { http } from '@/shared/services/http.js'
 import { formatTime } from '@/shared/utils/format.js'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const auth = useAuthStore()
+const { t } = useI18n()
 
 const loading = ref(true)
 const tickets = ref([])
@@ -23,13 +25,24 @@ async function loadDashboard() {
   try {
     const dni = auth.user?.dni ?? '76543210'
     const userId = auth.user?.id
+    const citizenName = auth.user?.nombre
 
-    const [citizenTickets, sedeList, serviceList, notes] = await Promise.all([
-      http.get(`/turnos?ciudadanoDNI=${encodeURIComponent(dni)}`),
+    const [allTickets, sedeList, serviceList, notes] = await Promise.all([
+      http.get('/turnos'),
       http.get('/sedes'),
       http.get('/servicios'),
       userId ? http.get(`/notificaciones?userId=${userId}`) : Promise.resolve([]),
     ])
+
+    let citizenTickets = allTickets.filter(ticket => String(ticket.ciudadanoDNI) === String(dni))
+
+    // Si el usuario quedó guardado en localStorage sin DNI, usamos su nombre como respaldo
+    // para que el panel ciudadano no aparezca vacío.
+    if (!citizenTickets.length && citizenName) {
+      citizenTickets = allTickets.filter(ticket =>
+        String(ticket.ciudadanoNombre).toLowerCase() === String(citizenName).toLowerCase()
+      )
+    }
 
     tickets.value = citizenTickets.sort((a, b) => new Date(b.horaIngreso) - new Date(a.horaIngreso))
     sedes.value = sedeList
@@ -37,15 +50,22 @@ async function loadDashboard() {
     notificaciones.value = notes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
     if (activeTicket.value) {
-      queue.value = await http.get(`/turnos?sedeId=${activeTicket.value.sedeId}&servicioId=${activeTicket.value.servicioId}&estado=en_espera`)
-      queue.value.sort((a, b) => new Date(a.horaIngreso) - new Date(b.horaIngreso))
+      queue.value = allTickets
+        .filter(ticket =>
+          String(ticket.sedeId) === String(activeTicket.value.sedeId) &&
+          String(ticket.servicioId) === String(activeTicket.value.servicioId) &&
+          ticket.estado === 'en_espera'
+        )
+        .sort((a, b) => new Date(a.horaIngreso) - new Date(b.horaIngreso))
+    } else {
+      queue.value = []
     }
   } finally {
     loading.value = false
   }
 }
 
-const firstName = computed(() => auth.user?.nombre?.split(' ')[0] ?? 'Ciudadano')
+const firstName = computed(() => auth.user?.nombre?.split(' ')[0] ?? t('sidebar.citizen'))
 
 const activeTicket = computed(() => {
   return tickets.value.find(ticket => ['en_espera', 'en_atencion'].includes(ticket.estado)) ?? null
@@ -65,7 +85,7 @@ const activeService = computed(() => {
 
 const position = computed(() => {
   if (!activeTicket.value) return '—'
-  if (activeTicket.value.estado === 'en_atencion') return 'En atención'
+  if (activeTicket.value.estado === 'en_atencion') return t('operator.serving')
   const index = queue.value.findIndex(ticket => String(ticket.id) === String(activeTicket.value.id))
   return index >= 0 ? `#${index + 1}` : '—'
 })
@@ -78,7 +98,7 @@ const peopleAhead = computed(() => {
 
 const estimatedWait = computed(() => {
   if (!activeTicket.value) return '—'
-  if (activeTicket.value.estado === 'en_atencion') return 'Ahora'
+  if (activeTicket.value.estado === 'en_atencion') return t('time.now')
   const duration = activeService.value?.duracionPromedio ?? 10
   return `${Math.max(5, peopleAhead.value * duration + duration)} min`
 })
@@ -95,11 +115,11 @@ const recentNotifications = computed(() => notificaciones.value.slice(0, 3))
 
 function statusLabel(status) {
   const labels = {
-    en_espera: 'En espera',
-    en_atencion: 'En atención',
-    atendido: 'Atendido',
-    ausente: 'Ausente',
-    cancelado: 'Cancelado',
+    en_espera: t('status.waiting'),
+    en_atencion: t('status.serving'),
+    atendido: t('status.served'),
+    ausente: t('status.absent'),
+    cancelado: t('status.cancelled'),
   }
   return labels[status] ?? status
 }
@@ -115,67 +135,67 @@ function statusClass(status) {
 }
 
 function getSedeName(sedeId) {
-  return sedes.value.find(sede => String(sede.id) === String(sedeId))?.nombre ?? 'Sede no registrada'
+  return sedes.value.find(sede => String(sede.id) === String(sedeId))?.nombre ?? t('citizen.noRegistered')
 }
 
 function getServiceName(serviceId) {
-  return servicios.value.find(service => String(service.id) === String(serviceId))?.nombre ?? 'Servicio general'
+  return servicios.value.find(service => String(service.id) === String(serviceId))?.nombre ?? t('services.general')
 }
 </script>
 
 <template>
-  <AppLayout title="Inicio" :subtitle="`Bienvenido, ${firstName}. Gestiona tus turnos y revisa el estado de atención.`">
+  <AppLayout title="Inicio" :subtitle="t('citizen.welcomeSubtitle', { name: firstName })">
     <div v-if="loading" class="dashboard-loading card">
       <div class="spinner"></div>
-      <p>Cargando tu información...</p>
+      <p>{{ t('common.loading') }}</p>
     </div>
 
     <template v-else>
       <section class="hero-card card">
         <div class="hero-content">
-          <span class="hero-kicker">Panel ciudadano</span>
-          <h1>Gestiona tus trámites sin esperar de más</h1>
+          <span class="hero-kicker">{{ t('citizen.panel') }}</span>
+          <h1>{{ t('citizen.heroTitle') }}</h1>
           <p>
-            Consulta tu turno activo, revisa tu posición en cola y encuentra nuevas entidades disponibles desde un solo lugar.
+            {{ t('citizen.heroText') }}
           </p>
           <div class="hero-actions">
-            <button class="btn btn-primary" @click="router.push('/citizen/buscar-entidad')">Buscar entidad</button>
-            <button class="btn btn-ghost" @click="router.push('/citizen/mis-turnos')">Ver mis turnos</button>
+            <button class="btn btn-primary" @click="router.push('/citizen/buscar-entidad')">{{ t('citizen.searchEntity') }}</button>
+            <button class="btn btn-ghost" @click="router.push('/citizen/mis-turnos')">{{ t('citizen.viewMyTurns') }}</button>
           </div>
         </div>
 
         <div class="hero-ticket" v-if="activeTicket">
-          <span>Turno activo</span>
+          <span>{{ t('citizen.activeTurn') }}</span>
           <strong>{{ activeTicket.codigo }}</strong>
-          <small>{{ activeSede?.nombre ?? 'Sede asignada' }}</small>
+          <small>{{ activeSede?.nombre ?? t('branches.assigned') }}</small>
         </div>
         <div class="hero-ticket empty" v-else>
-          <span>Estado actual</span>
-          <strong>Sin turno activo</strong>
-          <small>Genera un nuevo ticket para iniciar seguimiento.</small>
+          <span>{{ t('citizen.currentStatus') }}</span>
+          <strong>{{ t('citizen.noActiveTurn') }}</strong>
+          <small>{{ t('citizen.newTicketHint') }}</small>
         </div>
       </section>
 
       <section class="stats-grid">
         <article class="stat-card card">
-          <span class="stat-label">Turno activo</span>
+          <span class="stat-label">{{ t('citizen.activeTurn') }}</span>
           <strong>{{ stats.active }}</strong>
-          <small>{{ activeTicket ? activeTicket.codigo : 'No activo' }}</small>
+          <small>{{ activeTicket ? activeTicket.codigo : t('citizen.noActiveTurn') }}</small>
         </article>
         <article class="stat-card card">
-          <span class="stat-label">Atendidos</span>
+          <span class="stat-label">{{ t('citizen.served') }}</span>
           <strong>{{ stats.attended }}</strong>
-          <small>Historial personal</small>
+          <small>{{ t('citizen.personalHistory') }}</small>
         </article>
         <article class="stat-card card">
-          <span class="stat-label">En espera</span>
+          <span class="stat-label">{{ t('citizen.waiting') }}</span>
           <strong>{{ stats.pending }}</strong>
-          <small>Turnos pendientes</small>
+          <small>{{ t('citizen.pendingTurns') }}</small>
         </article>
         <article class="stat-card card">
-          <span class="stat-label">Alertas</span>
+          <span class="stat-label">{{ t('citizen.alerts') }}</span>
           <strong>{{ stats.notifications }}</strong>
-          <small>No leídas</small>
+          <small>{{ t('citizen.unread') }}</small>
         </article>
       </section>
 
@@ -183,61 +203,61 @@ function getServiceName(serviceId) {
         <article class="card active-card">
           <div class="section-head">
             <div>
-              <h2>Seguimiento de turno</h2>
-              <p>Información principal de tu atención actual.</p>
+              <h2>{{ t('citizen.turnTracking') }}</h2>
+              <p>{{ t('citizen.mainInfo') }}</p>
             </div>
             <span v-if="activeTicket" class="badge" :class="statusClass(activeTicket.estado)">{{ statusLabel(activeTicket.estado) }}</span>
           </div>
 
           <div v-if="activeTicket" class="ticket-panel">
             <div class="ticket-code-block">
-              <span>Código</span>
+              <span>{{ t('citizen.code') }}</span>
               <strong>{{ activeTicket.codigo }}</strong>
             </div>
 
             <div class="tracking-grid">
               <div>
-                <span>Posición</span>
+                <span>{{ t('citizen.position') }}</span>
                 <strong>{{ position }}</strong>
               </div>
               <div>
-                <span>Personas delante</span>
+                <span>{{ t('queue.peopleAhead') }}</span>
                 <strong>{{ peopleAhead }}</strong>
               </div>
               <div>
-                <span>Tiempo estimado</span>
+                <span>{{ t('queue.estimatedTime') }}</span>
                 <strong>{{ estimatedWait }}</strong>
               </div>
             </div>
 
             <div class="detail-list">
-              <p><span>Sede</span><strong>{{ activeSede?.nombre ?? 'No registrada' }}</strong></p>
-              <p><span>Dirección</span><strong>{{ activeSede?.direccion ?? 'No registrada' }}</strong></p>
-              <p><span>Servicio</span><strong>{{ activeService?.nombre ?? 'Servicio general' }}</strong></p>
-              <p><span>Ingreso</span><strong>{{ formatTime(activeTicket.horaIngreso) }}</strong></p>
+              <p><span>{{ t('branches.branch') }}</span><strong>{{ activeSede?.nombre ?? t('citizen.noRegistered') }}</strong></p>
+              <p><span>{{ t('citizen.address') }}</span><strong>{{ activeSede?.direccion ?? t('citizen.noRegistered') }}</strong></p>
+              <p><span>{{ t('services.service') }}</span><strong>{{ activeService?.nombre ?? t('services.general') }}</strong></p>
+              <p><span>{{ t('queue.entryTime') }}</span><strong>{{ formatTime(activeTicket.horaIngreso) }}</strong></p>
             </div>
           </div>
 
           <div v-else class="empty-state">
-            <h3>No tienes un turno activo</h3>
-            <p>Busca una institución, selecciona el servicio y genera tu ticket virtual.</p>
-            <button class="btn btn-primary" @click="router.push('/citizen/buscar-entidad')">Generar turno</button>
+            <h3>{{ t('citizen.noActiveTitle') }}</h3>
+            <p>{{ t('citizen.noActiveText') }}</p>
+            <button class="btn btn-primary" @click="router.push('/citizen/buscar-entidad')">{{ t('citizen.generateTurn') }}</button>
           </div>
         </article>
 
         <aside class="side-column">
           <article class="card quick-actions">
-            <h2>Acciones rápidas</h2>
-            <button @click="router.push('/citizen/buscar-entidad')">Buscar instituciones</button>
-            <button @click="router.push('/citizen/mis-turnos')">Consultar ticket actual</button>
-            <button @click="router.push('/citizen/historial')">Ver historial</button>
+            <h2>{{ t('citizen.quickActions') }}</h2>
+            <button @click="router.push('/citizen/buscar-entidad')">{{ t('citizen.searchInstitutions') }}</button>
+            <button @click="router.push('/citizen/mis-turnos')">{{ t('citizen.checkCurrentTicket') }}</button>
+            <button @click="router.push('/citizen/historial')">{{ t('citizen.viewHistory') }}</button>
           </article>
 
           <article class="card notifications-panel">
             <div class="section-head compact">
               <div>
-                <h2>Notificaciones</h2>
-                <p>Últimos avisos recibidos.</p>
+                <h2>{{ t('citizen.latestNotifications') }}</h2>
+                <p>{{ t('citizen.latestNotificationsText') }}</p>
               </div>
             </div>
             <div v-if="recentNotifications.length" class="notification-list">
@@ -246,7 +266,7 @@ function getServiceName(serviceId) {
                 <span>{{ note.message }}</span>
               </div>
             </div>
-            <p v-else class="muted-empty">No tienes notificaciones recientes.</p>
+            <p v-else class="muted-empty">{{ t('citizen.noRecentNotifications') }}</p>
           </article>
         </aside>
       </section>
@@ -254,19 +274,19 @@ function getServiceName(serviceId) {
       <section class="card history-card">
         <div class="section-head">
           <div>
-            <h2>Últimos turnos</h2>
-            <p>Resumen de tus solicitudes más recientes.</p>
+            <h2>{{ t('citizen.lastTurns') }}</h2>
+            <p>{{ t('citizen.lastTurnsText') }}</p>
           </div>
-          <button class="btn btn-ghost btn-sm" @click="router.push('/citizen/historial')">Ver todo</button>
+          <button class="btn btn-ghost btn-sm" @click="router.push('/citizen/historial')">{{ t('common.viewAll') }}</button>
         </div>
 
         <div v-if="recentTickets.length" class="ticket-table">
           <div class="table-row table-head">
-            <span>Código</span>
-            <span>Servicio</span>
-            <span>Sede</span>
-            <span>Hora</span>
-            <span>Estado</span>
+            <span>{{ t('citizen.code') }}</span>
+            <span>{{ t('services.service') }}</span>
+            <span>{{ t('branches.branch') }}</span>
+            <span>{{ t('time.hour') }}</span>
+            <span>{{ t('common.status') }}</span>
           </div>
           <div v-for="ticket in recentTickets" :key="ticket.id" class="table-row">
             <strong>{{ ticket.codigo }}</strong>
@@ -277,7 +297,7 @@ function getServiceName(serviceId) {
           </div>
         </div>
 
-        <p v-else class="muted-empty">Todavía no tienes turnos registrados.</p>
+        <p v-else class="muted-empty">{{ t('citizen.noTurnsYet') }}</p>
       </section>
     </template>
   </AppLayout>

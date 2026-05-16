@@ -12,7 +12,25 @@
     "share": "Compartir",
     "logout": "Cerrar sesión",
     "settings": "Ajustes",
-    "notifications": "Notificaciones"
+    "notifications": "Notificaciones",
+    "queueManagement": "Queue Management",
+    "language": "Idioma",
+    "home": "Inicio",
+    "role": "Rol",
+    "email": "Correo",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "actions": "Acciones",
+    "status": "Estado",
+    "active": "Activo",
+    "unassigned": "Sin asignar",
+    "update": "Actualizar",
+    "updating": "Actualizando...",
+    "read": "Leída",
+    "markAll": "Marcar todas",
+    "viewUnread": "Ver no leídas",
+    "viewAll": "Ver todas",
+    "delete": "Eliminar"
   },
   "sidebar": {
     "mainMenu": "Menú principal",
@@ -35,12 +53,17 @@
     "branches": "Sedes",
     "services": "Servicios",
     "operators": "Operadores",
-    "reports": "Reportes"
+    "reports": "Reportes",
+    "supervisor": "Supervisor",
+    "counter": "Ventanilla {number}"
   },
   "topbar": {
     "profile": "Perfil",
     "goSettings": "Ir a ajustes",
-    "goNotifications": "Ver notificaciones"
+    "goNotifications": "Ver notificaciones",
+    "language": "Idioma",
+    "spanish": "Español",
+    "english": "Inglés"
   },
   "login": {
     "title": "Iniciar sesión",
@@ -60,5 +83,186 @@
     "dayHistory": "Historial del día",
     "noRecords": "Sin registros",
     "noOperators": "Sin operadores"
+  },
+  "pages": {
+    "home": {
+      "title": "Inicio"
+    },
+    "searchEntity": {
+      "title": "Buscar entidad",
+      "subtitle": "Selecciona la institución y sede donde realizarás tu trámite"
+    },
+    "ticket": {
+      "title": "Mi turno activo"
+    },
+    "history": {
+      "title": "Historial de trámites",
+      "subtitle": "Todos tus turnos anteriores en FlowQueue"
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "subtitle": "Alertas y eventos recientes"
+    },
+    "settings": {
+      "title": "Configuración",
+      "subtitle": "Perfil y preferencias de tu cuenta"
+    },
+    "liveQueue": {
+      "title": "Cola en vivo",
+      "subtitle": "Actualización automática cada 15 segundos"
+    },
+    "operatorPanel": {
+      "title": "Panel Operador"
+    },
+    "reports": {
+      "title": "Reportes",
+      "subtitle": "Exportación y análisis de datos históricos"
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "analytics": {
+      "title": "Analítica",
+      "subtitle": "Indicadores para tomar decisiones por sede y horario"
+    },
+    "branches": {
+      "title": "Sedes",
+      "subtitle": "Administración de sedes y locales"
+    },
+    "users": {
+      "title": "Usuarios",
+      "subtitle": "Administración de operadores y supervisores"
+    },
+    "manageTurns": {
+      "title": "Gestionar turnos",
+      "subtitle": "Crea, filtra y actualiza los turnos de atención"
+    },
+    "turnStatus": {
+      "title": "Estado del turno",
+      "subtitle": "Consulta la posición actual de un ticket"
+    },
+    "turns": {
+      "title": "Turnos",
+      "subtitle": "Gestión de turnos del día"
+    }
+  },
+  "citizen": {
+    "welcomeSubtitle": "Bienvenido, {name}. Gestiona tus turnos y revisa el estado de atención.",
+    "panel": "Panel ciudadano",
+    "heroTitle": "Gestiona tus trámites sin esperar de más",
+    "heroText": "Consulta tu turno activo, revisa tu posición en cola y encuentra nuevas entidades disponibles desde un solo lugar.",
+    "searchEntity": "Buscar entidad",
+    "viewMyTurns": "Ver mis turnos",
+    "currentStatus": "Estado actual",
+    "noActiveTurn": "Sin turno activo",
+    "newTicketHint": "Genera un nuevo ticket para iniciar seguimiento.",
+    "activeTurn": "Turno activo",
+    "served": "Atendidos",
+    "waiting": "En espera",
+    "alerts": "Alertas",
+    "personalHistory": "Historial personal",
+    "pendingTurns": "Turnos pendientes",
+    "unread": "No leídas",
+    "turnTracking": "Seguimiento de turno",
+    "mainInfo": "Información principal de tu atención actual.",
+    "code": "Código",
+    "position": "Posición",
+    "address": "Dirección",
+    "noRegistered": "No registrada",
+    "noActiveTitle": "No tienes un turno activo",
+    "noActiveText": "Busca una institución, selecciona el servicio y genera tu ticket virtual.",
+    "generateTurn": "Generar turno",
+    "quickActions": "Acciones rápidas",
+    "searchInstitutions": "Buscar instituciones",
+    "checkCurrentTicket": "Consultar ticket actual",
+    "viewHistory": "Ver historial",
+    "latestNotifications": "Notificaciones",
+    "latestNotificationsText": "Últimos avisos recibidos.",
+    "noRecentNotifications": "No tienes notificaciones recientes.",
+    "lastTurns": "Últimos turnos",
+    "lastTurnsText": "Resumen de tus solicitudes más recientes.",
+    "noTurnsYet": "Todavía no tienes turnos registrados.",
+    "dni": "DNI"
+  },
+  "operator": {
+    "completeTurn": "Completar turno",
+    "currentlyServing": "En atención ahora",
+    "noActiveTurn": "Sin turno activo",
+    "noActiveText": "Llama el siguiente turno de la cola para iniciar la atención.",
+    "callNext": "Llamar siguiente",
+    "emptyQueue": "Cola vacía",
+    "waitingTurns": "Turnos en espera",
+    "next": "Siguiente",
+    "complete": "Completar",
+    "serving": "En atención"
+  },
+  "notifications": {
+    "markedRead": "Notificación marcada como leída.",
+    "allRead": "Todas las notificaciones fueron marcadas como leídas.",
+    "deleted": "Notificación eliminada.",
+    "unread": "Ver no leídas",
+    "all": "Ver todas",
+    "markAll": "Marcar todas",
+    "read": "Leída",
+    "new": "nuevas",
+    "empty": "No hay notificaciones para mostrar."
+  },
+  "settings": {
+    "userProfile": "Perfil de usuario",
+    "email": "Correo electrónico",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "min6": "Mínimo 6 caracteres",
+    "repeatPassword": "Repite la nueva contraseña",
+    "updatePassword": "Actualizar contraseña",
+    "updating": "Actualizando...",
+    "completePasswords": "Completa todos los campos de contraseña.",
+    "passwordLength": "La nueva contraseña debe tener al menos 6 caracteres.",
+    "passwordMismatch": "La confirmación no coincide con la nueva contraseña.",
+    "wrongPassword": "La contraseña actual no es correcta.",
+    "passwordUpdated": "Contraseña actualizada correctamente.",
+    "assignedCounter": "Ventanilla asignada",
+    "notApplicable": "No aplica",
+    "citizenSupervisorAccount": "Cuenta ciudadana/supervisor",
+    "security": "Seguridad"
+  },
+  "time": {
+    "now": "Ahora",
+    "hour": "Hora",
+    "today": "Hoy"
+  },
+  "status": {
+    "waiting": "En espera",
+    "serving": "En atención",
+    "served": "Atendido",
+    "servedPlural": "Atendidos",
+    "absent": "Ausente",
+    "absentPlural": "Ausentes",
+    "cancelled": "Cancelado"
+  },
+  "queue": {
+    "peopleAhead": "Personas delante",
+    "estimatedTime": "Tiempo estimado",
+    "entryTime": "Ingreso",
+    "calledAt": "Llamado",
+    "serviceTime": "tiempo en atención",
+    "avgTime": "T. prom.",
+    "waitingQueue": "Cola de espera",
+    "turns": "turnos",
+    "wait": "espera",
+    "noWaitingTurns": "No hay turnos en espera",
+    "serve": "Atender",
+    "skip": "Saltar",
+    "markAbsent": "Marcar ausente",
+    "noCurrentServing": "Sin turno en atención ahora mismo"
+  },
+  "branches": {
+    "branch": "Sede",
+    "assigned": "Sede asignada"
+  },
+  "services": {
+    "service": "Servicio",
+    "general": "Servicio general"
   }
 }

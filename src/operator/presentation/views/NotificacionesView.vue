@@ -1,7 +1,9 @@
 <script setup>
 import { computed, ref } from 'vue'
 import AppLayout from '@/shared/components/AppLayout.vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const notifs = ref([
   { id:1, tipo:'info',    titulo:'Turno A-001 completado',         desc:'Juan García Pérez fue atendido exitosamente.',         hora:'09:15', leido:true  },
   { id:2, tipo:'warning', titulo:'Ciudadano ausente',              desc:'El ciudadano del turno A-003 no se presentó.',          hora:'09:32', leido:true  },
@@ -16,24 +18,24 @@ const iconMap = { info:'ℹ', warning:'⚠', success:'✓' }
 const colorMap = { info:'notif-info', warning:'notif-warn', success:'notif-ok' }
 const visibleNotifs = computed(() => filter.value === 'no_leidas' ? notifs.value.filter(n => !n.leido) : notifs.value)
 const unreadCount = computed(() => notifs.value.filter(n => !n.leido).length)
-function markRead(n) { n.leido = true; feedback.value = `Notificación "${n.titulo}" marcada como leída.` }
-function markAllRead() { notifs.value.forEach(n => n.leido = true); feedback.value = 'Todas las notificaciones fueron marcadas como leídas.' }
-function removeNotif(id) { notifs.value = notifs.value.filter(n => n.id !== id); feedback.value = 'Notificación eliminada.' }
+function markRead(n) { n.leido = true; feedback.value = t('notifications.markedRead') }
+function markAllRead() { notifs.value.forEach(n => n.leido = true); feedback.value = t('notifications.allRead') }
+function removeNotif(id) { notifs.value = notifs.value.filter(n => n.id !== id); feedback.value = t('notifications.deleted') }
 </script>
 
 <template>
   <AppLayout title="Notificaciones" subtitle="Alertas y eventos recientes">
     <template #actions>
       <button class="action-btn" @click="filter = filter === 'todas' ? 'no_leidas' : 'todas'">
-        {{ filter === 'todas' ? 'Ver no leídas' : 'Ver todas' }}
+        {{ filter === 'todas' ? t('notifications.unread') : t('notifications.all') }}
       </button>
-      <button class="action-btn action-dark" @click="markAllRead">Marcar todas</button>
+      <button class="action-btn action-dark" @click="markAllRead">{{ t('notifications.markAll') }}</button>
     </template>
     <p v-if="feedback" class="feedback">{{ feedback }}</p>
     <div class="notif-list card">
       <div class="notif-header">
-        <p class="section-title">Hoy</p>
-        <span class="badge badge-blue">{{ unreadCount }} nuevas</span>
+        <p class="section-title">{{ t('time.today') }}</p>
+        <span class="badge badge-blue">{{ unreadCount }} {{ t('notifications.new') }}</span>
       </div>
       <div class="notif-item" v-for="n in visibleNotifs" :key="n.id" :class="{ unread: !n.leido }">
         <div class="notif-icon" :class="colorMap[n.tipo]">{{ iconMap[n.tipo] }}</div>
@@ -42,11 +44,11 @@ function removeNotif(id) { notifs.value = notifs.value.filter(n => n.id !== id);
           <div class="notif-desc">{{ n.desc }}</div>
         </div>
         <div class="notif-hora">{{ n.hora }}</div>
-        <button v-if="!n.leido" class="mini-btn" @click="markRead(n)">Leída</button>
-        <button class="mini-btn danger" @click="removeNotif(n.id)">Eliminar</button>
+        <button v-if="!n.leido" class="mini-btn" @click="markRead(n)">{{ t('notifications.read') }}</button>
+        <button class="mini-btn danger" @click="removeNotif(n.id)">{{ t('common.delete') }}</button>
         <div class="notif-dot" v-if="!n.leido"></div>
       </div>
-      <div v-if="!visibleNotifs.length" class="empty-state">No hay notificaciones para mostrar.</div>
+      <div v-if="!visibleNotifs.length" class="empty-state">{{ t('notifications.empty') }}</div>
     </div>
   </AppLayout>
 </template>

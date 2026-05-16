@@ -4,7 +4,9 @@ import { useAuthStore } from '@/iam/application/auth.store.js'
 import { useOperatorStore } from '@/operator/application/Operation.Store.js'
 import AppLayout from '@/shared/components/AppLayout.vue'
 import { formatTime, minutesSince, formatMinutes } from '@/shared/utils/format.js'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const auth     = useAuthStore()
 const operator = useOperatorStore()
 const elapsed  = ref('00:00')
@@ -28,16 +30,16 @@ async function callNext() {
 }
 
 const stats = computed(() => [
-  { label: 'En espera',  value: operator.queueCount, color: '#3b82f6' },
-  { label: 'Atendidos',  value: 4,                   color: '#22c55e' },
-  { label: 'Ausentes',   value: 1,                   color: '#f59e0b' },
-  { label: 'T. prom.',   value: '12 min',             color: '#8b5cf6' },
+  { label: t('status.waiting'),  value: operator.queueCount, color: '#3b82f6' },
+  { label: t('status.servedPlural'),  value: 4,                   color: '#22c55e' },
+  { label: t('status.absentPlural'),   value: 1,                   color: '#f59e0b' },
+  { label: t('queue.avgTime'),   value: '12 min',             color: '#8b5cf6' },
 ])
 
 const subtitle = computed(() =>
   operator.mostrador
-    ? `Ventana ${operator.mostrador.numero} · ${operator.mostrador.servicioNombre} · ${operator.mostrador.sedeNombre}`
-    : 'Cargando...'
+    ? `${t('sidebar.counter', { number: operator.mostrador.numero })} · ${operator.mostrador.servicioNombre} · ${operator.mostrador.sedeNombre}`
+    : t('common.loading')
 )
 </script>
 
@@ -45,46 +47,46 @@ const subtitle = computed(() =>
   <AppLayout title="Panel Operador" :subtitle="subtitle">
     <template #actions>
       <button class="tbtn tbtn-ghost" :disabled="!!operator.currentTicket || !operator.queueCount" @click="callNext()">
-        Llamar siguiente
+        {{ t('operator.callNext') }}
       </button>
       <button class="tbtn tbtn-dark" :disabled="!operator.currentTicket" @click="operator.markComplete()">
-        ✓ &nbsp;Completar turno
+        ✓ &nbsp;{{ t('operator.completeTurn') }}
       </button>
     </template>
 
     <div v-if="operator.loading" class="loading-screen">
-      <div class="spinner"></div><p>Cargando panel...</p>
+      <div class="spinner"></div><p>{{ t('common.loading') }}</p>
     </div>
 
     <template v-else>
       <!-- Turno activo -->
       <div class="attention-card card" v-if="operator.currentTicket">
         <div class="att-left">
-          <p class="att-label">En atención ahora</p>
+          <p class="att-label">{{ t('operator.currentlyServing') }}</p>
           <div class="att-code">{{ operator.currentTicket.codigo }}</div>
           <div class="att-citizen">{{ operator.currentTicket.ciudadanoNombre }}</div>
           <div class="att-meta">
-            DNI {{ operator.currentTicket.ciudadanoDNI }} &nbsp;·&nbsp;
-            Llamado {{ formatTime(operator.currentTicket.horaLlamado) }} &nbsp;·&nbsp;
-            Ventana {{ operator.mostrador?.numero }}
+            {{ t('citizen.dni') }} {{ operator.currentTicket.ciudadanoDNI }} &nbsp;·&nbsp;
+            {{ t('queue.calledAt') }} {{ formatTime(operator.currentTicket.horaLlamado) }} &nbsp;·&nbsp;
+            {{ t('sidebar.counter', { number: operator.mostrador?.numero }) }}
           </div>
           <div class="att-actions">
-            <button class="pill-btn pill-danger" @click="operator.markAbsent()">✗ Marcar ausente</button>
+            <button class="pill-btn pill-danger" @click="operator.markAbsent()">✗ {{ t('queue.markAbsent') }}</button>
           </div>
         </div>
         <div class="att-right">
           <span class="elapsed-num">{{ elapsed }}</span>
-          <span class="elapsed-lbl">tiempo en atención</span>
+          <span class="elapsed-lbl">{{ t('queue.serviceTime') }}</span>
         </div>
       </div>
 
       <div class="no-turn card" v-else>
         <div>
-          <p class="no-turn-title">Sin turno activo</p>
-          <p class="no-turn-sub">Llama el siguiente turno de la cola para iniciar la atención</p>
+          <p class="no-turn-title">{{ t('operator.noActiveTurn') }}</p>
+          <p class="no-turn-sub">{{ t('operator.noActiveText') }}</p>
         </div>
         <button class="pill-btn pill-dark pill-lg" :disabled="!operator.queueCount" @click="callNext()">
-          {{ operator.queueCount ? '▶  Llamar siguiente turno' : 'Cola vacía' }}
+          {{ operator.queueCount ? '▶  ' + t('operator.callNext') : t('operator.emptyQueue') }}
         </button>
       </div>
 
@@ -102,26 +104,26 @@ const subtitle = computed(() =>
       <!-- Cola -->
       <div class="card table-card">
         <div class="table-hdr">
-          <p class="section-title">Cola de espera</p>
-          <span class="badge badge-dark">{{ operator.queueCount }} turnos</span>
+          <p class="section-title">{{ t('queue.waitingQueue') }}</p>
+          <span class="badge badge-dark">{{ operator.queueCount }} {{ t('queue.turns') }}</span>
         </div>
         <div class="table-wrap">
           <table class="data-table">
-            <thead><tr><th>#</th><th>Código</th><th>Ciudadano</th><th>DNI</th><th>Espera</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>#</th><th>{{ t('citizen.code') }}</th><th>{{ t('sidebar.citizen') }}</th><th>DNI</th><th>{{ t('queue.wait') }}</th><th>{{ t('common.actions') }}</th></tr></thead>
             <tbody>
               <tr v-if="!operator.queue.length">
-                <td colspan="6" class="empty-cell">No hay turnos en espera</td>
+                <td colspan="6" class="empty-cell">{{ t('queue.noWaitingTurns') }}</td>
               </tr>
-              <tr v-for="(t, i) in operator.queue" :key="t.id" :class="{ 'row-next': i === 0 }">
+              <tr v-for="(ticket, i) in operator.queue" :key="ticket.id" :class="{ 'row-next': i === 0 }">
                 <td class="td-num">{{ i + 1 }}</td>
-                <td class="td-code">{{ t.codigo }}</td>
-                <td>{{ t.ciudadanoNombre }}</td>
-                <td class="td-muted">{{ t.ciudadanoDNI }}</td>
-                <td class="td-muted">{{ formatMinutes(minutesSince(t.horaIngreso)) }}</td>
+                <td class="td-code">{{ ticket.codigo }}</td>
+                <td>{{ ticket.ciudadanoNombre }}</td>
+                <td class="td-muted">{{ ticket.ciudadanoDNI }}</td>
+                <td class="td-muted">{{ formatMinutes(minutesSince(ticket.horaIngreso)) }}</td>
                 <td class="td-actions">
-                  <button class="pill-btn pill-dark" :disabled="!!operator.currentTicket" @click="operator.callNext(t.id)">Atender</button>
-                  <button class="pill-btn pill-ghost" @click="operator.skipTicket(t.id)">Saltar</button>
-                  <button class="pill-btn pill-ghost" @click="operator.markAbsent(t.id)">Ausente</button>
+                  <button class="pill-btn pill-dark" :disabled="!!operator.currentTicket" @click="operator.callNext(ticket.id)">{{ t('queue.serve') }}</button>
+                  <button class="pill-btn pill-ghost" @click="operator.skipTicket(ticket.id)">{{ t('queue.skip') }}</button>
+                  <button class="pill-btn pill-ghost" @click="operator.markAbsent(ticket.id)">{{ t('status.absent') }}</button>
                 </td>
               </tr>
             </tbody>

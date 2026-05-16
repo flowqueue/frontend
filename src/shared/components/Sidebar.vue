@@ -2,10 +2,12 @@
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/iam/application/auth.store.js'
+import { useI18n } from 'vue-i18n'
 
 const auth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
 const icons = {
   home: 'M3 10.8 12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-6H8v6H4a1 1 0 0 1-1-1z',
@@ -24,30 +26,32 @@ const icons = {
 }
 
 const citizenNav = [
-  { label: 'Inicio', icon: 'home', to: '/citizen' },
-  { label: 'Mis turnos', icon: 'ticket', to: '/citizen/mis-turnos' },
-  { label: 'Buscar entidad', icon: 'search', to: '/citizen/buscar-entidad' },
-  { label: 'Notificaciones', icon: 'bell', to: '/citizen/notificaciones' },
-  { label: 'Historial', icon: 'history', to: '/citizen/historial' },
-  { divider: true, label: 'CONFIGURACIÓN' },
-  { label: 'Ajustes', icon: 'settings', to: '/citizen/ajustes' },
+  { key: 'sidebar.home', icon: 'home', to: '/citizen' },
+  { key: 'sidebar.myTurns', icon: 'ticket', to: '/citizen/mis-turnos' },
+  { key: 'sidebar.searchEntity', icon: 'search', to: '/citizen/buscar-entidad' },
+  { key: 'sidebar.notifications', icon: 'bell', to: '/citizen/notificaciones' },
+  { key: 'sidebar.history', icon: 'history', to: '/citizen/historial' },
+  { divider: true, key: 'sidebar.configuration' },
+  { key: 'sidebar.settings', icon: 'settings', to: '/citizen/ajustes' },
 ]
 
 const operatorNav = [
-  { label: 'Mi ventanilla', icon: 'monitor', to: '/operator' },
-  { label: 'Cola activa', icon: 'list', to: '/operator/cola' },
-  { label: 'Pausar', icon: 'pause', to: '/operator/configuracion' },
-  { label: 'Estadísticas', icon: 'chart', to: '/operator/estadisticas' },
-  { label: 'Notificaciones', icon: 'bell', to: '/operator/notificaciones' },
+  { key: 'sidebar.myCounter', icon: 'monitor', to: '/operator' },
+  { key: 'sidebar.activeQueue', icon: 'list', to: '/operator/cola' },
+  { key: 'sidebar.pause', icon: 'pause', to: '/operator/configuracion' },
+  { key: 'sidebar.statistics', icon: 'chart', to: '/operator/estadisticas' },
+  { key: 'sidebar.notifications', icon: 'bell', to: '/operator/notificaciones' },
 ]
 
 const supervisorNav = [
-  { label: 'Dashboard', icon: 'chart', to: '/supervisor' },
-  { label: 'Analítica', icon: 'settings', to: '/supervisor/analitica' },
-  { label: 'Sedes', icon: 'building', to: '/supervisor/sedes' },
-  { label: 'Servicios', icon: 'list', to: '/supervisor/gestionar-turnos' },
-  { label: 'Operadores', icon: 'users', to: '/supervisor/usuarios' },
-  { label: 'Reportes', icon: 'report', to: '/supervisor/reportes' },
+  { key: 'sidebar.dashboard', icon: 'chart', to: '/supervisor' },
+  { key: 'sidebar.analytics', icon: 'settings', to: '/supervisor/analitica' },
+  { key: 'sidebar.branches', icon: 'building', to: '/supervisor/sedes' },
+  { key: 'sidebar.services', icon: 'list', to: '/supervisor/gestionar-turnos' },
+  { key: 'sidebar.operators', icon: 'users', to: '/supervisor/usuarios' },
+  { key: 'sidebar.notifications', icon: 'bell', to: '/supervisor/notificaciones' },
+  { key: 'sidebar.settings', icon: 'settings', to: '/supervisor/configuracion' },
+  { key: 'sidebar.reports', icon: 'report', to: '/supervisor/reportes' },
 ]
 
 const navItems = computed(() => {
@@ -57,15 +61,15 @@ const navItems = computed(() => {
 })
 
 const roleTitle = computed(() => {
-  if (auth.user?.isOperator) return 'OPERADOR'
-  if (auth.user?.isSupervisor) return 'ADMINISTRADOR'
-  return 'MENÚ PRINCIPAL'
+  if (auth.user?.isOperator) return t('sidebar.operator').toUpperCase()
+  if (auth.user?.isSupervisor) return t('sidebar.admin').toUpperCase()
+  return t('sidebar.mainMenu').toUpperCase()
 })
 
 const roleLabel = computed(() => {
-  if (auth.user?.isOperator) return 'Ventanilla 3'
-  if (auth.user?.isSupervisor) return 'Supervisor'
-  return 'Ciudadano'
+  if (auth.user?.isOperator) return t('sidebar.counter', { number: 3 })
+  if (auth.user?.isSupervisor) return t('sidebar.supervisor')
+  return t('sidebar.citizen')
 })
 
 const initials = computed(() => {
@@ -88,21 +92,21 @@ function handleLogout() { auth.logout(); router.push('/login') }
       <div class="logo-icon">FQ</div>
       <div>
         <span class="logo-name">FlowQueue</span>
-        <span class="logo-caption">Queue Management</span>
+        <span class="logo-caption">{{ t('common.queueManagement') }}</span>
       </div>
     </div>
 
     <nav class="sidebar-nav">
       <div class="nav-section">{{ roleTitle }}</div>
-      <template v-for="item in navItems" :key="item.label">
-        <div v-if="item.divider" class="nav-section divider-section">{{ item.label }}</div>
+      <template v-for="item in navItems" :key="item.key">
+        <div v-if="item.divider" class="nav-section divider-section">{{ t(item.key) }}</div>
         <a v-else class="nav-item" :class="{ active: isActive(item) }" href="#" @click.prevent="navigate(item.to)">
           <span class="nav-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
               <path :d="icons[item.icon]" />
             </svg>
           </span>
-          <span class="nav-label">{{ item.label }}</span>
+          <span class="nav-label">{{ t(item.key) }}</span>
         </a>
       </template>
     </nav>
@@ -113,7 +117,7 @@ function handleLogout() { auth.logout(); router.push('/login') }
         <span class="user-name">{{ auth.user?.nombre }}</span>
         <span class="user-role">{{ roleLabel }}</span>
       </div>
-      <button class="logout-btn" @click="handleLogout" title="Cerrar sesión" aria-label="Cerrar sesión">
+      <button class="logout-btn" @click="handleLogout" :title="t('common.logout')" :aria-label="t('common.logout')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
           <path d="M16 17l5-5-5-5" />

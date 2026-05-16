@@ -1,13 +1,11 @@
 export class Notification {
-  constructor({ id, userId, user_id, title, message, type = 'info', createdAt, created_at, read = false }) {
+  constructor({ id, userId, title, message, type = 'info', createdAt = new Date().toISOString(), read = false }) {
     this.id = id
-    this.userId = userId ?? user_id ?? null
-    this.user_id = this.userId
+    this.userId = userId
     this.title = title
     this.message = message
     this.type = type
-    this.createdAt = createdAt ?? created_at ?? new Date().toISOString()
-    this.created_at = this.createdAt
+    this.createdAt = createdAt
     this.read = read
   }
 }

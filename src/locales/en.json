@@ -12,7 +12,25 @@
     "share": "Share",
     "logout": "Log out",
     "settings": "Settings",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "queueManagement": "Queue Management",
+    "language": "Language",
+    "home": "Home",
+    "role": "Role",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "actions": "Actions",
+    "status": "Status",
+    "active": "Active",
+    "unassigned": "Unassigned",
+    "update": "Update",
+    "updating": "Updating...",
+    "read": "Read",
+    "markAll": "Mark all",
+    "viewUnread": "View unread",
+    "viewAll": "View all",
+    "delete": "Delete"
   },
   "sidebar": {
     "mainMenu": "Main menu",
@@ -35,12 +53,17 @@
     "branches": "Branches",
     "services": "Services",
     "operators": "Operators",
-    "reports": "Reports"
+    "reports": "Reports",
+    "supervisor": "Supervisor",
+    "counter": "Counter {number}"
   },
   "topbar": {
     "profile": "Profile",
     "goSettings": "Go to settings",
-    "goNotifications": "View notifications"
+    "goNotifications": "View notifications",
+    "language": "Language",
+    "spanish": "Spanish",
+    "english": "English"
   },
   "login": {
     "title": "Sign in",
@@ -60,5 +83,186 @@
     "dayHistory": "Daily history",
     "noRecords": "No records",
     "noOperators": "No operators"
+  },
+  "pages": {
+    "home": {
+      "title": "Home"
+    },
+    "searchEntity": {
+      "title": "Search entity",
+      "subtitle": "Select the institution and branch where you will complete your procedure"
+    },
+    "ticket": {
+      "title": "My active ticket"
+    },
+    "history": {
+      "title": "Procedure history",
+      "subtitle": "All your previous tickets in FlowQueue"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Recent alerts and events"
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Profile and account preferences"
+    },
+    "liveQueue": {
+      "title": "Live queue",
+      "subtitle": "Automatic update every 15 seconds"
+    },
+    "operatorPanel": {
+      "title": "Operator Panel"
+    },
+    "reports": {
+      "title": "Reports",
+      "subtitle": "Export and analysis of historical data"
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "subtitle": "Indicators for decisions by branch and schedule"
+    },
+    "branches": {
+      "title": "Branches",
+      "subtitle": "Branch and location management"
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Operator and supervisor management"
+    },
+    "manageTurns": {
+      "title": "Manage tickets",
+      "subtitle": "Create, filter and update service tickets"
+    },
+    "turnStatus": {
+      "title": "Ticket status",
+      "subtitle": "Check the current position of a ticket"
+    },
+    "turns": {
+      "title": "Tickets",
+      "subtitle": "Daily ticket management"
+    }
+  },
+  "citizen": {
+    "welcomeSubtitle": "Welcome, {name}. Manage your tickets and review service status.",
+    "panel": "Citizen panel",
+    "heroTitle": "Manage your procedures without waiting more",
+    "heroText": "Check your active ticket, review your queue position and find available institutions from one place.",
+    "searchEntity": "Search entity",
+    "viewMyTurns": "View my tickets",
+    "currentStatus": "Current status",
+    "noActiveTurn": "No active ticket",
+    "newTicketHint": "Generate a new ticket to start tracking.",
+    "activeTurn": "Active ticket",
+    "served": "Served",
+    "waiting": "Waiting",
+    "alerts": "Alerts",
+    "personalHistory": "Personal history",
+    "pendingTurns": "Pending tickets",
+    "unread": "Unread",
+    "turnTracking": "Ticket tracking",
+    "mainInfo": "Main information about your current service.",
+    "code": "Code",
+    "position": "Position",
+    "address": "Address",
+    "noRegistered": "Not registered",
+    "noActiveTitle": "You do not have an active ticket",
+    "noActiveText": "Search for an institution, select the service and generate your virtual ticket.",
+    "generateTurn": "Generate ticket",
+    "quickActions": "Quick actions",
+    "searchInstitutions": "Search institutions",
+    "checkCurrentTicket": "Check current ticket",
+    "viewHistory": "View history",
+    "latestNotifications": "Notifications",
+    "latestNotificationsText": "Latest notices received.",
+    "noRecentNotifications": "You have no recent notifications.",
+    "lastTurns": "Latest tickets",
+    "lastTurnsText": "Summary of your most recent requests.",
+    "noTurnsYet": "You do not have registered tickets yet.",
+    "dni": "ID"
+  },
+  "operator": {
+    "completeTurn": "Complete ticket",
+    "currentlyServing": "Currently serving",
+    "noActiveTurn": "No active ticket",
+    "noActiveText": "Call the next ticket in the queue to start service.",
+    "callNext": "Call next",
+    "emptyQueue": "Empty queue",
+    "waitingTurns": "Waiting tickets",
+    "next": "Next",
+    "complete": "Complete",
+    "serving": "Serving"
+  },
+  "notifications": {
+    "markedRead": "Notification marked as read.",
+    "allRead": "All notifications were marked as read.",
+    "deleted": "Notification deleted.",
+    "unread": "View unread",
+    "all": "View all",
+    "markAll": "Mark all",
+    "read": "Read",
+    "new": "new",
+    "empty": "No notifications to display."
+  },
+  "settings": {
+    "userProfile": "User profile",
+    "email": "Email address",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "min6": "Minimum 6 characters",
+    "repeatPassword": "Repeat the new password",
+    "updatePassword": "Update password",
+    "updating": "Updating...",
+    "completePasswords": "Complete all password fields.",
+    "passwordLength": "The new password must have at least 6 characters.",
+    "passwordMismatch": "The confirmation does not match the new password.",
+    "wrongPassword": "The current password is not correct.",
+    "passwordUpdated": "Password updated successfully.",
+    "assignedCounter": "Assigned counter",
+    "notApplicable": "Not applicable",
+    "citizenSupervisorAccount": "Citizen/supervisor account",
+    "security": "Security"
+  },
+  "time": {
+    "now": "Now",
+    "hour": "Hour",
+    "today": "Today"
+  },
+  "status": {
+    "waiting": "Waiting",
+    "serving": "Serving",
+    "served": "Served",
+    "servedPlural": "Served",
+    "absent": "Absent",
+    "absentPlural": "Absent",
+    "cancelled": "Cancelled"
+  },
+  "queue": {
+    "peopleAhead": "People ahead",
+    "estimatedTime": "Estimated time",
+    "entryTime": "Entry",
+    "calledAt": "Called at",
+    "serviceTime": "service time",
+    "avgTime": "Avg. time",
+    "waitingQueue": "Waiting queue",
+    "turns": "tickets",
+    "wait": "waiting",
+    "noWaitingTurns": "No waiting tickets",
+    "serve": "Serve",
+    "skip": "Skip",
+    "markAbsent": "Mark absent",
+    "noCurrentServing": "No ticket currently being served"
+  },
+  "branches": {
+    "branch": "Branch",
+    "assigned": "Assigned branch"
+  },
+  "services": {
+    "service": "Service",
+    "general": "General service"
   }
 }
