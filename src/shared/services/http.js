@@ -6,11 +6,6 @@ async function request(path, options = {}) {
     ...options.headers,
   }
 
-  if (ANON_KEY) {
-    headers.apikey = ANON_KEY
-    headers.Authorization = `Bearer ${ANON_KEY}`
-  }
-
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
     headers,
