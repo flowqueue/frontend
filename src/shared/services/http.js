@@ -1,5 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
-const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+const BASE_URL = 'https://flowqueuefakeapi.onrender.com'
 
 async function request(path, options = {}) {
   const headers = {
