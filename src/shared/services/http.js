@@ -1,4 +1,4 @@
-const BASE_URL = 'https://flowqueuefakeapi.onrender.com'
+const BASE_URL = 'https://flowqueue-backend-production.up.railway.app'
 
 async function request(path, options = {}) {
   const headers = {
