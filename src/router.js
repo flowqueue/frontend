@@ -4,7 +4,7 @@ function homeByRole(user) {
   if (user?.rol === 'citizen') return '/citizen'
   if (user?.rol === 'operator') return '/operator'
   if (user?.rol === 'supervisor') return '/supervisor'
-  return '/citizen/buscar-entidad'
+
 }
 
 const routes = [

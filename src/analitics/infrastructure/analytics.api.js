@@ -17,7 +17,7 @@ export async function getMetricasHorarias(sedeId, fecha) {
 export async function getMostradores(sedeId) {
   const [allMostradores, servicios] = await Promise.all([
     http.get('/mostradores'),
-    http.get('/servicios'),
+    http.get('/services'),
   ])
 
   return allMostradores

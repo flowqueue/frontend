@@ -28,10 +28,10 @@ async function loadDashboard() {
     const citizenName = auth.user?.nombre
 
     const [allTickets, sedeList, serviceList, notes] = await Promise.all([
-      http.get('/turnos'),
-      http.get('/sedes'),
-      http.get('/servicios'),
-      userId ? http.get(`/notificaciones?userId=${userId}`) : Promise.resolve([]),
+      http.get('/turns'),
+      http.get('/branch_offices'),
+      http.get('/services'),
+      userId ? http.get(`/notifications?user_id=${userId}`) : Promise.resolve([]),
     ])
 
     let citizenTickets = allTickets.filter(ticket => String(ticket.ciudadanoDNI) === String(dni))

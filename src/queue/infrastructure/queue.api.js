@@ -15,7 +15,7 @@ function sortDescByIngreso(a, b) {
 }
 
 async function getRawTickets() {
-  return await http.get('/turnos')
+  return await http.get('/turns')
 }
 
 export async function getQueue(sedeId, servicioId = null) {

@@ -1,4 +1,4 @@
-const BASE_URL = 'https://flowqueue-backend-production.up.railway.app'
+const BASE_URL = 'https://flowqueue-backend-production.up.railway.app/api/v1'
 
 async function request(path, options = {}) {
   const headers = {
