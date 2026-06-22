@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 function homeByRole(user) {
-  if (user?.rol === 'citizen') return '/citizen'
-  if (user?.rol === 'operator') return '/operator'
-  if (user?.rol === 'supervisor') return '/supervisor'
-
+  // Cambiamos user?.rol por user?.role
+  if (user?.role === 'citizen') return '/citizen'
+  if (user?.role === 'operator') return '/operator'
+  if (user?.role === 'supervisor') return '/supervisor'
+  return '/citizen/buscar-entidad'
 }
 
 const routes = [
@@ -144,7 +145,10 @@ router.beforeEach((to) => {
   const user = raw ? JSON.parse(raw) : null
 
   if (!to.meta.public && !user) return '/login'
-  if (to.meta.role && user?.rol !== to.meta.role) return homeByRole(user)
+
+  // Cambiamos user?.rol por user?.role
+  if (to.meta.role && user?.role !== to.meta.role) return homeByRole(user)
+
   if (to.path === '/login' && user) return homeByRole(user)
 })
 
