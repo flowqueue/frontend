@@ -7,12 +7,13 @@ export async function getInstituciones() {
 }
 
 export async function getSedes() {
-  const data = await http.get('/branch_offices')
+  const data = await http.get('/branch-offices')
   return data.map(s => new Sede(s))
+
 }
 
 export async function getSedeById(id) {
-  const data = await http.get(`/branch_offices/${id}`)
+  const data = await http.get(`/branch-offices/${id}`)
   return new Sede(data)
 }
 

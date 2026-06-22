@@ -30,9 +30,9 @@ async function loadActiveTicket() {
     }
     if (ticket.value) {
       const [s, sv, q] = await Promise.all([
-        http.get(`/sedes/${ticket.value.sedeId}`),
-        http.get(`/servicios/${ticket.value.servicioId}`),
-        http.get(`/turnos?sedeId=${ticket.value.sedeId}&servicioId=${ticket.value.servicioId}&estado=en_espera`),
+        http.get(`/branch-office/${ticket.value.sedeId}`),
+        http.get(`/services/${ticket.value.servicioId}`),
+        http.get(`/turns?sedeId=${ticket.value.sedeId}&servicioId=${ticket.value.servicioId}&estado=en_espera`),
       ])
       sede.value = s
       servicio.value = sv

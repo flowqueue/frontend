@@ -39,7 +39,7 @@ export async function getCurrentTicket(mostradorId) {
 }
 
 export async function getTicketById(id) {
-  const data = await http.get(`/turnos/${id}`)
+  const data = await http.get(`/turns/${id}`)
   return new Turno(data)
 }
 

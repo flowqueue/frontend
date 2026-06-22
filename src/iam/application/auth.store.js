@@ -5,7 +5,8 @@ import { User } from '@/iam/domain/User.js'
 
 export const useAuthStore = defineStore('auth', () => {
   const _raw = localStorage.getItem('fq_user')
-  const user = ref(_raw ? new User(JSON.parse(_raw)) : null)
+  const user = ref(_raw ? JSON.parse(_raw) : null)
+  console.log(user.value)
 
   const isAuthenticated = computed(() => !!user.value)
 

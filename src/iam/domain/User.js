@@ -1,9 +1,9 @@
 export class User {
   constructor({ id, nombre, email, rol, mostradorId, sedeId, dni }) {
     this.id = id
-    this.nombre = nombre
+    this.fullName = nombre
     this.email = email
-    this.rol = rol
+    this.role = rol
     this.mostradorId = mostradorId ?? null
     this.sedeId = sedeId ?? null
     this.dni = dni ?? null

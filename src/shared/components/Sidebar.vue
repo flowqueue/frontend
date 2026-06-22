@@ -9,6 +9,17 @@ const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
 
+// 1. Capturamos y leemos directamente el localStorage
+const rawData = localStorage.getItem('fq_user')
+const currentUser = rawData ? JSON.parse(rawData) : null
+
+// 2. Extraemos los datos a la fuerza (minúsculas para evitar errores)
+const roleString = (currentUser?.role || currentUser?.rol || '').toLowerCase()
+const isOperator = roleString === 'operator' || roleString === 'operador'
+const isSupervisor = roleString === 'supervisor' || roleString === 'admin'
+const nombreUsuario = currentUser?.fullName || 'Usuario'
+
+
 const icons = {
   home: 'M3 10.8 12 3l9 7.8V21a1 1 0 0 1-1 1h-5v-6H8v6H4a1 1 0 0 1-1-1z',
   ticket: 'M4 5h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z',
@@ -54,26 +65,27 @@ const supervisorNav = [
   { key: 'sidebar.reports', icon: 'report', to: '/supervisor/reportes' },
 ]
 
+// 3. Modificamos los computados para usar las variables locales
 const navItems = computed(() => {
-  if (auth.user?.isOperator) return operatorNav
-  if (auth.user?.isSupervisor) return supervisorNav
+  if (isOperator) return operatorNav
+  if (isSupervisor) return supervisorNav
   return citizenNav
 })
 
 const roleTitle = computed(() => {
-  if (auth.user?.isOperator) return t('sidebar.operator').toUpperCase()
-  if (auth.user?.isSupervisor) return t('sidebar.admin').toUpperCase()
+  if (isOperator) return t('sidebar.operator').toUpperCase()
+  if (isSupervisor) return t('sidebar.admin').toUpperCase()
   return t('sidebar.mainMenu').toUpperCase()
 })
 
 const roleLabel = computed(() => {
-  if (auth.user?.isOperator) return t('sidebar.counter', { number: 3 })
-  if (auth.user?.isSupervisor) return t('sidebar.supervisor')
+  if (isOperator) return t('sidebar.counter', { number: 3 })
+  if (isSupervisor) return t('sidebar.supervisor')
   return t('sidebar.citizen')
 })
 
 const initials = computed(() => {
-  return auth.user?.nombre?.split(' ').map(word => word[0]).slice(0, 2).join('').toUpperCase() ?? 'U'
+  return nombreUsuario.split(' ').map(word => word[0]).slice(0, 2).join('').toUpperCase() || 'U'
 })
 
 function isActive(item) {
@@ -84,11 +96,14 @@ function isActive(item) {
 
 function navigate(to) { router.push(to) }
 function handleLogout() { auth.logout(); router.push('/login') }
+
+
+
 </script>
 
 <template>
   <aside class="sidebar">
-    <div class="sidebar-logo" @click="navigate(auth.user?.isSupervisor ? '/supervisor' : auth.user?.isOperator ? '/operator' : '/citizen')">
+    <div class="sidebar-logo" @click="navigate(isSupervisor ? '/supervisor' : isOperator ? '/operator' : '/citizen')">
       <div class="logo-icon">FQ</div>
       <div>
         <span class="logo-name">FlowQueue</span>
@@ -114,7 +129,7 @@ function handleLogout() { auth.logout(); router.push('/login') }
     <div class="sidebar-footer">
       <div class="user-avatar">{{ initials }}</div>
       <div class="user-meta">
-        <span class="user-name">{{ auth.user?.nombre }}</span>
+        <span class="user-name">{{ nombreUsuario }}</span>
         <span class="user-role">{{ roleLabel }}</span>
       </div>
       <button class="logout-btn" @click="handleLogout" :title="t('common.logout')" :aria-label="t('common.logout')">

@@ -29,7 +29,7 @@ async function loadDashboard() {
 
     const [allTickets, sedeList, serviceList, notes] = await Promise.all([
       http.get('/turns'),
-      http.get('/branch_offices'),
+      http.get('/branch-offices'),
       http.get('/services'),
       userId ? http.get(`/notifications?user_id=${userId}`) : Promise.resolve([]),
     ])

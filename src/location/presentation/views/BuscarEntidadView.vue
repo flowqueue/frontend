@@ -53,7 +53,7 @@ async function generateTicket(item) {
   if (!item.sede || !item.servicios.length) return
   creatingId.value = item.id
   const service = item.servicios[0]
-  const count = await http.get(`/turnos?servicioId=${service.id}`)
+  const count = await http.get(`/turns?service_id=${service.id}`)
   const next = String(count.length + 1).padStart(3, '0')
   const payload = {
     codigo: `${service.prefijo ?? 'A'}-${next}`,
