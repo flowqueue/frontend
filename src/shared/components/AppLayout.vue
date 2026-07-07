@@ -109,6 +109,11 @@ function logout() {
         <div class="topbar-right" @click.stop>
           <slot name="actions" />
 
+          <div class="system-chip" aria-label="Estado de sincronizacion">
+            <span></span>
+            En vivo
+          </div>
+
           <div class="lang-switcher" aria-label="Language switcher">
             <button :class="{ active: locale === 'es' }" @click="changeLanguage('es')">ES</button>
             <button :class="{ active: locale === 'en' }" @click="changeLanguage('en')">EN</button>
@@ -160,30 +165,35 @@ function logout() {
 
 <style scoped>
 .topbar-left { flex: 1; min-width: 0; }
-.topbar-title { font-size: 1.1rem; font-weight: 800; color: var(--text); line-height: 1; }
-.topbar-sub { font-size: 0.76rem; color: var(--text-muted); margin-top: 4px; }
+.topbar-title { font-size: 1.05rem; font-weight: 900; color: var(--text); line-height: 1; letter-spacing: 0; }
+.topbar-sub { font-size: 0.76rem; color: var(--text-muted); margin-top: 5px; }
 .topbar-right { display: flex; align-items: center; gap: 0.75rem; }
-.icon-btn { width: 34px; height: 34px; border-radius: 50%; background: #f8fafc; border: 1px solid var(--border); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.18s ease; }
-.icon-btn:hover { background: #eaf2ff; color: #1d6fe9; border-color: #bfdbfe; transform: translateY(-1px); }
+.system-chip { display: inline-flex; align-items: center; gap: 0.42rem; min-height: 34px; padding: 0 0.7rem; border: 1px solid #c7f0df; border-radius: 999px; background: #ecfdf3; color: #087852; font-size: 0.72rem; font-weight: 900; white-space: nowrap; }
+.system-chip span { width: 7px; height: 7px; border-radius: 50%; background: #12b76a; box-shadow: 0 0 0 4px rgba(18, 183, 106, 0.14); animation: topbar-pulse 1.7s ease-in-out infinite; }
+.icon-btn { width: 36px; height: 36px; border-radius: 50%; background: #fff; border: 1px solid var(--border); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.18s ease; }
+.icon-btn:hover { background: #eef6ff; color: var(--primary); border-color: #bfdbfe; transform: translateY(-1px); }
 .bell svg { width: 17px; height: 17px; }
-.lang-switcher { display: flex; align-items: center; gap: 0.25rem; padding: 0.18rem; border: 1px solid var(--border); border-radius: 999px; background: #f8fafc; }
+.lang-switcher { display: flex; align-items: center; gap: 0.25rem; padding: 0.18rem; border: 1px solid var(--border); border-radius: 999px; background: #fff; }
 .lang-switcher button { border: 0; border-radius: 999px; padding: 0.34rem 0.55rem; font-size: 0.68rem; font-weight: 900; color: var(--text-muted); background: transparent; cursor: pointer; }
-.lang-switcher button.active { background: #1d6fe9; color: #fff; }
+.lang-switcher button.active { background: var(--ink); color: #fff; }
 .profile-wrap { position: relative; }
-.user-bubble { width: 34px; height: 34px; border: 0; border-radius: 50%; background: #1d6fe9; color: #fff; font-weight: 800; font-size: 0.76rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; box-shadow: 0 10px 22px rgba(29,111,233,0.22); }
-.profile-menu { position: absolute; right: 0; top: calc(100% + 0.7rem); width: 260px; background: #fff; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 18px 45px rgba(15,23,42,0.16); padding: 0.7rem; z-index: 150; }
+.user-bubble { width: 36px; height: 36px; border: 0; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--teal)); color: #fff; font-weight: 900; font-size: 0.76rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; box-shadow: 0 10px 22px rgba(25, 103, 210, 0.22); }
+.profile-menu { position: absolute; right: 0; top: calc(100% + 0.7rem); width: 260px; background: #fff; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 18px 45px rgba(15,23,42,0.16); padding: 0.7rem; z-index: 150; animation: menu-in 0.18s ease both; }
 .profile-head { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem; border-bottom: 1px solid var(--border); margin-bottom: 0.4rem; }
-.profile-avatar { width: 38px; height: 38px; border-radius: 50%; background: #1d6fe9; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+.profile-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--teal)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; }
 .profile-head strong { display: block; color: var(--text); font-size: 0.86rem; }
 .profile-head span { display: block; color: var(--text-muted); font-size: 0.72rem; margin-top: 2px; }
-.profile-menu > button { width: 100%; border: 0; background: transparent; text-align: left; padding: 0.72rem 0.75rem; border-radius: 10px; color: var(--text); font-weight: 750; cursor: pointer; }
-.profile-menu > button:hover { background: #f1f5f9; color: #1d6fe9; }
+.profile-menu > button { width: 100%; border: 0; background: transparent; text-align: left; padding: 0.72rem 0.75rem; border-radius: 6px; color: var(--text); font-weight: 750; cursor: pointer; }
+.profile-menu > button:hover { background: #f1f5f9; color: var(--primary); }
 .profile-menu > button.danger { color: #dc2626; }
 .profile-menu > button.danger:hover { background: #fef2f2; color: #b91c1c; }
 .profile-language { padding: 0.65rem 0.75rem; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin: 0.35rem 0; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
 .profile-language span { color: var(--text-muted); font-size: 0.78rem; font-weight: 800; }
 .profile-language div { display: flex; gap: 0.3rem; }
-.profile-language button { border: 1px solid var(--border); background: #f8fafc; color: var(--text-muted); padding: 0.3rem 0.5rem; border-radius: 8px; font-size: 0.68rem; font-weight: 900; cursor: pointer; }
-.profile-language button.active { background: #1d6fe9; border-color: #1d6fe9; color: #fff; }
+.profile-language button { border: 1px solid var(--border); background: #f8fafc; color: var(--text-muted); padding: 0.3rem 0.5rem; border-radius: 6px; font-size: 0.68rem; font-weight: 900; cursor: pointer; }
+.profile-language button.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+@keyframes topbar-pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 4px rgba(18, 183, 106, 0.14); } 50% { transform: scale(1.22); box-shadow: 0 0 0 8px rgba(18, 183, 106, 0.04); } }
+@keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 860px) { .system-chip { display: none; } }
 @media (max-width: 720px) { .lang-switcher { display: none; } .profile-menu { right: -0.2rem; width: 240px; } }
 </style>

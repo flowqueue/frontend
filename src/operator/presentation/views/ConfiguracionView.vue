@@ -38,17 +38,16 @@ async function updatePassword() {
   }
   saving.value = true
   try {
-    const users = await http.get(`/usuarios?email=${encodeURIComponent(auth.user.email)}`)
-    const user = users[0]
-    if (!user || user.password !== currentPassword.value) {
-      error.value = t('settings.wrongPassword')
-      return
-    }
-    await http.patch(`/usuarios/${user.id}`, { password: newPassword.value })
+    await http.patch(`/usuarios/${auth.user.id}/password`, {
+      currentPassword: currentPassword.value,
+      newPassword: newPassword.value,
+    })
     currentPassword.value = ''
     newPassword.value = ''
     confirmPassword.value = ''
     feedback.value = t('settings.passwordUpdated')
+  } catch (_) {
+    error.value = t('settings.wrongPassword')
   } finally {
     saving.value = false
   }

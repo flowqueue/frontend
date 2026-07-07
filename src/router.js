@@ -141,29 +141,29 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
   const raw = localStorage.getItem('fq_user')
   const user = raw ? JSON.parse(raw) : null
   const role = user?.role?.toLowerCase() // 'operator', 'supervisor', o 'citizen'
 
   // 1. Si la ruta requiere autenticación y no hay usuario, al login
   if (to.meta.requiresAuth && !user) {
-    return next('/login')
+    return '/login'
   }
 
   // 2. Lógica de protección por roles
   if (to.meta.role) {
     // Si el rol de la ruta coincide con el del usuario, adelante
     if (to.meta.role === role) {
-      return next()
+      return true
     } else {
       // Si el rol no coincide, lo mandamos a su home correspondiente
-      if (role === 'operator') return next('/operator')
-      if (role === 'supervisor') return next('/supervisor')
-      return next('/citizen')
+      if (role === 'operator') return '/operator'
+      if (role === 'supervisor') return '/supervisor'
+      return '/citizen'
     }
   }
 
-  next()
+  return true
 })
 export default router

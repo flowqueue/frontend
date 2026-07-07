@@ -1,21 +1,35 @@
 import { http } from '@/shared/services/http.js'
 
+function normalizeAuthenticatedResponse(payload) {
+  const user = payload?.user ?? payload
+
+  return {
+    ...user,
+    token: payload?.token ?? user?.token ?? null,
+  }
+}
+
 export async function loginApi(email, password) {
   try {
-    // 1. Hacemos un POST a la ruta correcta enviando el body que espera el backend
-    const user = await http.post('/auth/sign-in', {
-      email: email,
-      password: password
-    });
+    const response = await http.post('/auth/sign-in', {
+      email,
+      password,
+    })
 
-    // 2. Si el backend responde con un 200 OK, significa que las credenciales son válidas.
-    // Asumiendo que tu servicio 'http' devuelve directamente la data (el JSON de respuesta),
-    // simplemente retornamos el usuario. Si usas Axios sin interceptores, podría ser 'return user.data'.
-    return user;
-
-  } catch (error) {
-    // 3. Si el backend responde con un error (ej. 401 Unauthorized o 400 Bad Request),
-    // el servicio HTTP arrojará una excepción. La capturamos aquí.
-    throw new Error('Credenciales incorrectas');
+    return normalizeAuthenticatedResponse(response)
+  } catch (_) {
+    throw new Error('Credenciales incorrectas')
   }
+}
+
+export async function registerApi({ nombre, dni, email, password, role = 'citizen' }) {
+  const response = await http.post('/auth/sign-up', {
+    fullName: nombre,
+    email,
+    password,
+    role,
+    documentNumber: dni,
+  })
+
+  return normalizeAuthenticatedResponse(response)
 }

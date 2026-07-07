@@ -9,15 +9,11 @@ const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
 
-// 1. Capturamos y leemos directamente el localStorage
-const rawData = localStorage.getItem('fq_user')
-const currentUser = rawData ? JSON.parse(rawData) : null
 
-// 2. Extraemos los datos a la fuerza (minúsculas para evitar errores)
-const roleString = (currentUser?.role || currentUser?.rol || '').toLowerCase()
-const isOperator = roleString === 'operator' || roleString === 'operador'
-const isSupervisor = roleString === 'supervisor' || roleString === 'admin'
-const nombreUsuario = currentUser?.fullName || 'Usuario'
+const roleString = computed(() => (auth.user?.role || auth.user?.rol || '').toLowerCase())
+const isOperator = computed(() => roleString.value === 'operator' || roleString.value === 'operador')
+const isSupervisor = computed(() => roleString.value === 'supervisor' || roleString.value === 'admin')
+const nombreUsuario = computed(() => auth.user?.fullName || auth.user?.nombre || 'Usuario')
 
 
 const icons = {
@@ -65,27 +61,26 @@ const supervisorNav = [
   { key: 'sidebar.reports', icon: 'report', to: '/supervisor/reportes' },
 ]
 
-// 3. Modificamos los computados para usar las variables locales
 const navItems = computed(() => {
-  if (isOperator) return operatorNav
-  if (isSupervisor) return supervisorNav
+  if (isOperator.value) return operatorNav
+  if (isSupervisor.value) return supervisorNav
   return citizenNav
 })
 
 const roleTitle = computed(() => {
-  if (isOperator) return t('sidebar.operator').toUpperCase()
-  if (isSupervisor) return t('sidebar.admin').toUpperCase()
+  if (isOperator.value) return t('sidebar.operator').toUpperCase()
+  if (isSupervisor.value) return t('sidebar.admin').toUpperCase()
   return t('sidebar.mainMenu').toUpperCase()
 })
 
 const roleLabel = computed(() => {
-  if (isOperator) return t('sidebar.counter', { number: 3 })
-  if (isSupervisor) return t('sidebar.supervisor')
+  if (isOperator.value) return t('sidebar.counter', { number: auth.user?.mostradorId ?? 1 })
+  if (isSupervisor.value) return t('sidebar.supervisor')
   return t('sidebar.citizen')
 })
 
 const initials = computed(() => {
-  return nombreUsuario.split(' ').map(word => word[0]).slice(0, 2).join('').toUpperCase() || 'U'
+  return nombreUsuario.value.split(' ').map(word => word[0]).slice(0, 2).join('').toUpperCase() || 'U'
 })
 
 function isActive(item) {
@@ -104,7 +99,7 @@ function handleLogout() { auth.logout(); router.push('/login') }
 <template>
   <aside class="sidebar">
     <div class="sidebar-logo" @click="navigate(isSupervisor ? '/supervisor' : isOperator ? '/operator' : '/citizen')">
-      <div class="logo-icon">FQ</div>
+      <div class="logo-icon">FQ<span class="brand-mark-pulse"></span></div>
       <div>
         <span class="logo-name">FlowQueue</span>
         <span class="logo-caption">{{ t('common.queueManagement') }}</span>
@@ -150,17 +145,21 @@ function handleLogout() { auth.logout(); router.push('/login') }
   top: 0;
   bottom: 0;
   width: var(--sidebar-width);
-  background: linear-gradient(180deg, #071f33 0%, #061827 100%);
+  background:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(180deg, #0d1b2a 0%, #101828 100%);
+  background-size: 22px 22px, auto;
   display: flex;
   flex-direction: column;
   z-index: 100;
   border-right: 1px solid rgba(255,255,255,0.08);
+  animation: sidebar-in 0.46s ease both;
 }
 .sidebar-logo {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1.1rem 1.25rem;
+  padding: 1.05rem 1.05rem 1rem;
   border-bottom: 1px solid var(--sidebar-border);
   flex-shrink: 0;
   cursor: pointer;
@@ -168,8 +167,8 @@ function handleLogout() { auth.logout(); router.push('/login') }
 .logo-icon {
   width: 34px;
   height: 34px;
-  background: linear-gradient(135deg, #1d6fe9, #5dcaa5);
-  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), var(--teal));
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -177,6 +176,19 @@ function handleLogout() { auth.logout(); router.push('/login') }
   font-size: 0.72rem;
   color: #fff;
   box-shadow: 0 10px 24px rgba(29,111,233,0.25);
+  position: relative;
+}
+.brand-mark-pulse {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #0d1b2a;
+  border-radius: 999px;
+  background: #12b76a;
+  box-shadow: 0 0 0 4px rgba(18, 183, 106, 0.14);
+  animation: side-pulse 1.7s ease-in-out infinite;
 }
 .logo-name,
 .logo-caption {
@@ -191,13 +203,13 @@ function handleLogout() { auth.logout(); router.push('/login') }
 .logo-caption {
   margin-top: 2px;
   font-size: 0.62rem;
-  color: #8ca0b8;
+  color: #9fb1c8;
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 .sidebar-nav {
   flex: 1;
-  padding: 0.9rem 0.75rem;
+  padding: 0.85rem 0.7rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -228,10 +240,11 @@ function handleLogout() { auth.logout(); router.push('/login') }
   cursor: pointer;
   transition: background 0.14s, color 0.14s, transform 0.14s;
   position: relative;
-  border-radius: 9px;
+  border-radius: 8px;
+  animation: nav-in 0.32s ease both;
 }
 .nav-item:hover {
-  background: rgba(255,255,255,0.06);
+  background: var(--sidebar-hover);
   color: #e5eefb;
   transform: translateX(2px);
 }
@@ -247,7 +260,7 @@ function handleLogout() { auth.logout(); router.push('/login') }
   top: 0.55rem;
   bottom: 0.55rem;
   width: 3px;
-  background: #5dcaa5;
+  background: var(--teal);
   border-radius: 999px;
 }
 .nav-icon {
@@ -271,13 +284,13 @@ function handleLogout() { auth.logout(); router.push('/login') }
   padding: 0.95rem 1rem;
   border-top: 1px solid var(--sidebar-border);
   flex-shrink: 0;
-  background: rgba(0,0,0,0.16);
+  background: rgba(3, 7, 18, 0.22);
 }
 .user-avatar {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #1d6fe9;
+  background: linear-gradient(135deg, var(--primary), var(--teal));
   color: #fff;
   font-size: 0.72rem;
   font-weight: 900;
@@ -308,11 +321,11 @@ function handleLogout() { auth.logout(); router.push('/login') }
 .logout-btn {
   width: 32px;
   height: 32px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.08);
   color: #8ca0b8;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -324,5 +337,42 @@ function handleLogout() { auth.logout(); router.push('/login') }
   color: #ef4444;
   background: rgba(239,68,68,0.08);
   border-color: rgba(239,68,68,0.22);
+}
+
+@keyframes sidebar-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes side-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 4px rgba(18, 183, 106, 0.14);
+  }
+
+  50% {
+    transform: scale(1.22);
+    box-shadow: 0 0 0 8px rgba(18, 183, 106, 0.04);
+  }
+}
+
+@keyframes nav-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 </style>

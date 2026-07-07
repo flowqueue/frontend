@@ -18,7 +18,7 @@ export async function getSedeById(id) {
 }
 
 export async function getServiciosBySede(sedeId) {
-  const data = await http.get(`/services?/branch_office_id=${sedeId}`)
+  const data = await http.get(`/services?branchOfficeId=${sedeId}`)
   return data.map(s => new Servicio(s))
 }
 
