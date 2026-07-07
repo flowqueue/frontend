@@ -5,7 +5,7 @@ import {
   transformResponse,
 } from '@/shared/services/apiAdapter.js'
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://flowqueue-backend-production.up.railway.app/api/v1'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://flowqueue-backend-production-f7c9.up.railway.app/api/v1'
 
 function getAuthToken() {
   const directToken = localStorage.getItem('fq_token')
