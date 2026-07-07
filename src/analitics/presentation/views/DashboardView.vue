@@ -22,11 +22,17 @@ const maxAtendidos = computed(() => Math.max(...analytics.metricas.map(m => m.at
 function barPct(val) { return `${Math.round((val / maxAtendidos.value) * 100)}%` }
 
 /* KPIs — 4 cards como en el Figma */
+const tasaAtencion = computed(() => {
+  const total = analytics.totalAtendidos + analytics.totalAusentes
+  if (!total) return '—'
+  return Math.round((analytics.totalAtendidos / total) * 100)
+})
+
 const kpis = computed(() => [
   { label: 'En espera',      value: analytics.totalPendientes, unit: 'personas', color: 'blue'   },
   { label: 'Atendidos hoy', value: analytics.totalAtendidos,  unit: 'turnos',   color: 'green'  },
   { label: 'T. espera prom.',value: `${analytics.tiempoPromedio}`, unit: 'minutos', color: 'orange' },
-  { label: 'Satisfacción',  value: '87',                      unit: '%',        color: 'teal'   },
+  { label: 'Tasa de atención', value: tasaAtencion.value,     unit: '%',        color: 'teal'   },
 ])
 
 /* Operadores en la sede */

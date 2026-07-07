@@ -16,6 +16,17 @@ export function formatMinutes(minutes) {
   return `${h}h ${m}m`
 }
 
+export function timeAgo(isoString) {
+  if (!isoString) return ''
+  const minutes = minutesSince(isoString)
+  if (minutes < 1) return 'Ahora'
+  if (minutes < 60) return `Hace ${minutes} min`
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `Hace ${hours} h`
+  const days = Math.floor(hours / 24)
+  return `Hace ${days} d`
+}
+
 export function formatDuration(startIso, endIso) {
   const start = new Date(startIso)
   const end = endIso ? new Date(endIso) : new Date()

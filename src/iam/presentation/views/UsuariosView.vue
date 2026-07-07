@@ -39,6 +39,9 @@ const filteredUsers = computed(() => {
   })
 })
 
+const roleLabels = { operator: 'Operador', supervisor: 'Supervisor', admin: 'Admin', citizen: 'Ciudadano' }
+const roleBadges = { operator: 'badge-blue', supervisor: 'badge-green', admin: 'badge-dark', citizen: 'badge-orange' }
+
 function sedeName(id) { return sedes.value.find(s => String(s.id) === String(id))?.nombre ?? 'Sin sede' }
 function mostradorName(id) {
   const m = mostradores.value.find(m => String(m.id) === String(id))
@@ -124,6 +127,8 @@ async function deleteUser(user) {
             <option value="todos">Todos los roles</option>
             <option value="operator">Operadores</option>
             <option value="supervisor">Supervisores</option>
+            <option value="citizen">Ciudadanos</option>
+            <option value="admin">Admins</option>
           </select>
         </div>
 
@@ -134,7 +139,7 @@ async function deleteUser(user) {
             <tbody>
               <tr v-for="u in filteredUsers" :key="u.id">
                 <td><strong>{{ u.nombre }}</strong><br><span class="td-muted">{{ u.email }}</span></td>
-                <td><span class="badge" :class="u.rol === 'operator' ? 'badge-blue' : 'badge-green'">{{ u.rol === 'operator' ? 'Operador' : 'Supervisor' }}</span></td>
+                <td><span class="badge" :class="roleBadges[u.rol] ?? 'badge-gray'">{{ roleLabels[u.rol] ?? u.rol }}</span></td>
                 <td class="td-muted">{{ sedeName(u.sedeId) }}</td>
                 <td class="td-muted">{{ u.rol === 'operator' ? mostradorName(u.mostradorId) : 'No aplica' }}</td>
                 <td><button class="pill-danger" @click="deleteUser(u)">Eliminar</button></td>

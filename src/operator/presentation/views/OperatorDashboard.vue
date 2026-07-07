@@ -4,13 +4,20 @@ import { useAuthStore } from '@/iam/application/auth.store.js'
 import { useOperatorStore } from '@/operator/application/Operation.Store.js'
 import AppLayout from '@/shared/components/AppLayout.vue'
 import { formatTime, minutesSince, formatMinutes } from '@/shared/utils/format.js'
+import { getResumen } from '@/analitics/infrastructure/analytics.api.js'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const auth     = useAuthStore()
 const operator = useOperatorStore()
 const elapsed  = ref('00:00')
+const resumen  = ref(null)
 let timer = null
+
+async function loadResumen() {
+  if (!operator.mostrador) return
+  resumen.value = await getResumen(operator.mostrador.sedeId, operator.mostrador.servicioId).catch(() => null)
+}
 
 function updateElapsed() {
   if (!operator.currentTicket?.horaLlamado) { elapsed.value = '00:00'; return }
@@ -20,6 +27,7 @@ function updateElapsed() {
 
 onMounted(async () => {
   await operator.loadDashboard(auth.user.mostradorId)
+  await loadResumen()
   timer = setInterval(updateElapsed, 1000)
 })
 onUnmounted(() => clearInterval(timer))
@@ -27,13 +35,24 @@ onUnmounted(() => clearInterval(timer))
 async function callNext() {
   await operator.callNext()
   updateElapsed()
+  loadResumen()
+}
+
+async function completeTurn() {
+  await operator.markComplete()
+  loadResumen()
+}
+
+async function absentTurn(ticketId = null) {
+  await operator.markAbsent(ticketId)
+  loadResumen()
 }
 
 const stats = computed(() => [
   { label: t('status.waiting'),  value: operator.queueCount, color: '#3b82f6' },
-  { label: t('status.servedPlural'),  value: 4,                   color: '#22c55e' },
-  { label: t('status.absentPlural'),   value: 1,                   color: '#f59e0b' },
-  { label: t('queue.avgTime'),   value: '12 min',             color: '#8b5cf6' },
+  { label: t('status.servedPlural'),  value: resumen.value?.completedTurns ?? 0, color: '#22c55e' },
+  { label: t('status.absentPlural'),   value: resumen.value?.absentTurns ?? 0,    color: '#f59e0b' },
+  { label: t('queue.avgTime'),   value: `${Math.round(resumen.value?.averageServiceMinutes ?? 0)} min`, color: '#8b5cf6' },
 ])
 
 const subtitle = computed(() =>
@@ -49,7 +68,7 @@ const subtitle = computed(() =>
       <button class="tbtn tbtn-ghost" :disabled="!!operator.currentTicket || !operator.queueCount" @click="callNext()">
         {{ t('operator.callNext') }}
       </button>
-      <button class="tbtn tbtn-dark" :disabled="!operator.currentTicket" @click="operator.markComplete()">
+      <button class="tbtn tbtn-dark" :disabled="!operator.currentTicket" @click="completeTurn()">
         ✓ &nbsp;{{ t('operator.completeTurn') }}
       </button>
     </template>
@@ -71,7 +90,7 @@ const subtitle = computed(() =>
             {{ t('sidebar.counter', { number: operator.mostrador?.numero }) }}
           </div>
           <div class="att-actions">
-            <button class="pill-btn pill-danger" @click="operator.markAbsent()">✗ {{ t('queue.markAbsent') }}</button>
+            <button class="pill-btn pill-danger" @click="absentTurn()">✗ {{ t('queue.markAbsent') }}</button>
           </div>
         </div>
         <div class="att-right">
@@ -123,7 +142,7 @@ const subtitle = computed(() =>
                 <td class="td-actions">
                   <button class="pill-btn pill-dark" :disabled="!!operator.currentTicket" @click="operator.callNext(ticket.id)">{{ t('queue.serve') }}</button>
                   <button class="pill-btn pill-ghost" @click="operator.skipTicket(ticket.id)">{{ t('queue.skip') }}</button>
-                  <button class="pill-btn pill-ghost" @click="operator.markAbsent(ticket.id)">{{ t('status.absent') }}</button>
+                  <button class="pill-btn pill-ghost" @click="absentTurn(ticket.id)">{{ t('status.absent') }}</button>
                 </td>
               </tr>
             </tbody>

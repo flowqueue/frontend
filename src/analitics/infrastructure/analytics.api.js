@@ -14,6 +14,14 @@ export async function getMetricasHorarias(sedeId, fecha) {
   return exactDate.length ? exactDate : bySede
 }
 
+export async function getResumen(sedeId = null, servicioId = null) {
+  const params = new URLSearchParams()
+  if (sedeId) params.set('sedeId', sedeId)
+  if (servicioId) params.set('servicioId', servicioId)
+  const query = params.toString()
+  return http.get(`/analytics/summary${query ? `?${query}` : ''}`)
+}
+
 export async function getMostradores(sedeId) {
   const [allMostradores, servicios] = await Promise.all([
     http.get('/mostradores'),
