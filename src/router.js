@@ -141,9 +141,34 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to) => {
+function clearStoredSession() {
+  localStorage.removeItem('fq_user')
+  localStorage.removeItem('fq_token')
+}
+
+function readStoredRouteUser() {
   const raw = localStorage.getItem('fq_user')
-  const user = raw ? JSON.parse(raw) : null
+  const token = localStorage.getItem('fq_token')
+
+  if (!raw) return null
+
+  try {
+    const user = JSON.parse(raw)
+    const sessionToken = token ?? user?.token
+    if (!sessionToken) {
+      clearStoredSession()
+      return null
+    }
+
+    return { ...user, token: sessionToken }
+  } catch (_) {
+    clearStoredSession()
+    return null
+  }
+}
+
+router.beforeEach((to) => {
+  const user = readStoredRouteUser()
   const role = user?.role?.toLowerCase() // 'operator', 'supervisor', o 'citizen'
 
   // 1. Si la ruta requiere autenticación y no hay usuario, al login

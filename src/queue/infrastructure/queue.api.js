@@ -6,6 +6,10 @@ function sameId(a, b) {
   return String(a) === String(b)
 }
 
+function isNumericId(id) {
+  return /^\d+$/.test(String(id ?? ''))
+}
+
 function sortAscByIngreso(a, b) {
   return new Date(a.horaIngreso) - new Date(b.horaIngreso)
 }
@@ -39,6 +43,7 @@ export async function getCurrentTicket(mostradorId) {
 }
 
 export async function getTicketById(id) {
+  if (!isNumericId(id)) throw new Error('Invalid turn id')
   const data = await http.get(`/turns/${id}`)
   return new Turno(data)
 }

@@ -5,7 +5,8 @@ import {
   transformResponse,
 } from '@/shared/services/apiAdapter.js'
 
-const BASE_URL = 'https://flowqueue-backend-production-f7c9.up.railway.app/api/v1'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
+  ?? 'https://flowqueue-backend-production-f7c9.up.railway.app/api/v1'
 
 function getAuthToken() {
   const directToken = localStorage.getItem('fq_token')
@@ -16,6 +17,11 @@ function getAuthToken() {
   } catch (_) {
     return null
   }
+}
+
+function clearAuthSession() {
+  localStorage.removeItem('fq_user')
+  localStorage.removeItem('fq_token')
 }
 
 async function request(path, options = {}) {
@@ -46,6 +52,13 @@ async function request(path, options = {}) {
   const res = await fetch(`${BASE_URL}${normalized.path}`, requestOptions)
 
   if (!res.ok) {
+    if (res.status === 401 && !normalized.path.startsWith('/auth/')) {
+      clearAuthSession()
+      if (window.location.pathname !== '/login') {
+        window.location.assign('/login')
+      }
+    }
+
     let message = `HTTP ${res.status}`
     try {
       const body = await res.json()
