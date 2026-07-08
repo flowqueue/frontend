@@ -45,9 +45,9 @@ const citizenNav = [
 const operatorNav = [
   { key: 'sidebar.myCounter', icon: 'monitor', to: '/operator' },
   { key: 'sidebar.activeQueue', icon: 'list', to: '/operator/cola' },
-  { key: 'sidebar.pause', icon: 'pause', to: '/operator/configuracion' },
   { key: 'sidebar.statistics', icon: 'chart', to: '/operator/estadisticas' },
   { key: 'sidebar.notifications', icon: 'bell', to: '/operator/notificaciones' },
+  { key: 'sidebar.settings', icon: 'settings', to: '/operator/configuracion' },
 ]
 
 const supervisorNav = [

@@ -40,6 +40,13 @@ const visibleNotifs = computed(() =>
   filter.value === 'no_leidas' ? notifs.value.filter(n => !n.read) : notifs.value)
 const unreadCount = computed(() => notifs.value.filter(n => !n.read).length)
 
+const role = computed(() => (auth.user?.role || auth.user?.rol || '').toLowerCase())
+const emptyHint = computed(() => {
+  if (role.value === 'citizen') return 'Aquí verás avisos cuando tu turno sea llamado, atendido o cancelado.'
+  if (role.value === 'operator' || role.value === 'operador') return 'Los ciudadanos reciben avisos automáticos cuando atiendes sus turnos. Aquí verás alertas dirigidas a tu cuenta.'
+  return 'Aquí aparecerán las alertas del sistema dirigidas a tu cuenta.'
+})
+
 async function markRead(n) {
   try {
     await markNotificationAsRead(n.id)
@@ -86,7 +93,7 @@ async function markAllRead() {
       <div v-if="!visibleNotifs.length" class="empty-state">
         <span class="empty-icon">🔔</span>
         <p>{{ t('notifications.empty') }}</p>
-        <p class="empty-hint">Recibirás avisos cuando tus turnos avancen o cambien de estado.</p>
+        <p class="empty-hint">{{ emptyHint }}</p>
       </div>
     </div>
   </AppLayout>

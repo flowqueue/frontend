@@ -13,6 +13,8 @@ const statusFilter = ref('todos')
 const sedeFilter = ref('todos')
 const creating = ref(false)
 const formError = ref('')
+const actionError = ref('')
+const busyId = ref(null)
 
 const form = ref({
   ciudadanoNombre: '',
@@ -121,11 +123,33 @@ async function createTurno() {
 }
 
 async function changeEstado(turno, estado) {
-  const payload = { estado }
-  if (estado === 'en_atencion') payload.horaLlamado = new Date().toISOString()
-  if (estado === 'atendido' || estado === 'ausente' || estado === 'cancelado') payload.horaFin = new Date().toISOString()
-  await http.patch(`/turnos/${turno.id}`, payload)
-  await loadData()
+  actionError.value = ''
+  busyId.value = turno.id
+  try {
+    const payload = { estado }
+    if (estado === 'en_atencion') payload.horaLlamado = new Date().toISOString()
+    if (estado === 'atendido' || estado === 'ausente' || estado === 'cancelado') payload.horaFin = new Date().toISOString()
+    await http.patch(`/turnos/${turno.id}`, payload)
+    await loadData()
+  } catch (_) {
+    actionError.value = `No se pudo actualizar el turno ${turno.codigo}. Recuerda: primero se llama el turno y luego se marca atendido o ausente.`
+  } finally {
+    busyId.value = null
+  }
+}
+
+async function deleteTurno(turno) {
+  if (!confirm(`¿Eliminar el turno ${turno.codigo} de ${turno.ciudadanoNombre}? Esta acción no se puede deshacer.`)) return
+  actionError.value = ''
+  busyId.value = turno.id
+  try {
+    await http.delete(`/turnos/${turno.id}`)
+    await loadData()
+  } catch (_) {
+    actionError.value = `No se pudo eliminar el turno ${turno.codigo}.`
+  } finally {
+    busyId.value = null
+  }
 }
 </script>
 
@@ -192,6 +216,8 @@ async function changeEstado(turno, estado) {
           </select>
         </div>
 
+        <p v-if="actionError" class="action-error">{{ actionError }}</p>
+
         <div v-if="loading" class="loading-screen"><div class="spinner"></div><p>Cargando turnos...</p></div>
 
         <div v-else class="table-wrap">
@@ -211,9 +237,11 @@ async function changeEstado(turno, estado) {
                 <td class="td-muted">{{ formatTime(turno.horaIngreso) }}</td>
                 <td><span class="badge" :class="estadoClass[turno.estado]">{{ estadoLabels[turno.estado] ?? turno.estado }}</span></td>
                 <td class="td-actions">
-                  <button class="pill-btn pill-dark" :disabled="turno.estado !== 'en_espera'" @click="changeEstado(turno, 'en_atencion')">Llamar</button>
-                  <button class="pill-btn pill-ghost" :disabled="turno.estado === 'atendido'" @click="changeEstado(turno, 'atendido')">Atendido</button>
-                  <button class="pill-btn pill-danger" :disabled="turno.estado === 'cancelado'" @click="changeEstado(turno, 'cancelado')">Cancelar</button>
+                  <button v-if="turno.estado === 'en_espera'" class="pill-btn pill-dark" :disabled="busyId === turno.id" @click="changeEstado(turno, 'en_atencion')">Llamar</button>
+                  <button v-if="turno.estado === 'en_atencion'" class="pill-btn pill-green" :disabled="busyId === turno.id" @click="changeEstado(turno, 'atendido')">Atendido</button>
+                  <button v-if="turno.estado === 'en_atencion'" class="pill-btn pill-ghost" :disabled="busyId === turno.id" @click="changeEstado(turno, 'ausente')">Ausente</button>
+                  <button v-if="['en_espera', 'en_atencion'].includes(turno.estado)" class="pill-btn pill-danger" :disabled="busyId === turno.id" @click="changeEstado(turno, 'cancelado')">Cancelar</button>
+                  <button class="pill-btn pill-trash" :disabled="busyId === turno.id" title="Eliminar turno" @click="deleteTurno(turno)">Eliminar</button>
                 </td>
               </tr>
             </tbody>
@@ -250,8 +278,12 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px 
 .pill-btn { border: none; border-radius: 999px; padding: .32rem .65rem; font-size: .72rem; font-weight: 700; cursor: pointer; }
 .pill-btn:disabled { opacity: .45; cursor: not-allowed; }
 .pill-dark { background: #1e293b; color: #fff; }
+.pill-green { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
 .pill-ghost { background: #f1f5f9; color: var(--text-muted); border: 1px solid var(--border); }
 .pill-danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+.pill-trash { background: transparent; color: #94a3b8; border: 1px solid var(--border); }
+.pill-trash:hover:not(:disabled) { color: #b91c1c; border-color: #fca5a5; background: #fef2f2; }
+.action-error { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; padding: .6rem .8rem; border-radius: 8px; font-size: .78rem; margin-bottom: .8rem; }
 .empty-cell { text-align: center; padding: 2.5rem; color: var(--text-muted); }
 .loading-screen { min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--text-muted); }
 .spinner { width: 34px; height: 34px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin .8s linear infinite; }

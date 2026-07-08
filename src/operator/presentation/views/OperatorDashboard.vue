@@ -12,6 +12,7 @@ const auth     = useAuthStore()
 const operator = useOperatorStore()
 const elapsed  = ref('00:00')
 const resumen  = ref(null)
+const actionError = ref('')
 let timer = null
 
 async function loadResumen() {
@@ -32,20 +33,36 @@ onMounted(async () => {
 })
 onUnmounted(() => clearInterval(timer))
 
+async function runAction(fn) {
+  actionError.value = ''
+  try {
+    await fn()
+    loadResumen()
+  } catch (_) {
+    actionError.value = 'No se pudo completar la acción. Actualiza la página e inténtalo de nuevo.'
+  }
+}
+
 async function callNext() {
-  await operator.callNext()
-  updateElapsed()
-  loadResumen()
+  await runAction(async () => {
+    await operator.callNext()
+    updateElapsed()
+  })
+}
+
+async function serveTicket(ticketId) {
+  await runAction(async () => {
+    await operator.callNext(ticketId)
+    updateElapsed()
+  })
 }
 
 async function completeTurn() {
-  await operator.markComplete()
-  loadResumen()
+  await runAction(() => operator.markComplete())
 }
 
 async function absentTurn(ticketId = null) {
-  await operator.markAbsent(ticketId)
-  loadResumen()
+  await runAction(() => operator.markAbsent(ticketId))
 }
 
 const stats = computed(() => [
@@ -78,6 +95,8 @@ const subtitle = computed(() =>
     </div>
 
     <template v-else>
+      <p v-if="actionError" class="op-action-error">{{ actionError }}</p>
+
       <!-- Turno activo -->
       <div class="attention-card card" v-if="operator.currentTicket">
         <div class="att-left">
@@ -140,9 +159,8 @@ const subtitle = computed(() =>
                 <td class="td-muted">{{ ticket.ciudadanoDNI }}</td>
                 <td class="td-muted">{{ formatMinutes(minutesSince(ticket.horaIngreso)) }}</td>
                 <td class="td-actions">
-                  <button class="pill-btn pill-dark" :disabled="!!operator.currentTicket" @click="operator.callNext(ticket.id)">{{ t('queue.serve') }}</button>
-                  <button class="pill-btn pill-ghost" @click="operator.skipTicket(ticket.id)">{{ t('queue.skip') }}</button>
-                  <button class="pill-btn pill-ghost" @click="absentTurn(ticket.id)">{{ t('status.absent') }}</button>
+                  <button class="pill-btn pill-dark" :disabled="!!operator.currentTicket" @click="serveTicket(ticket.id)">{{ t('queue.serve') }}</button>
+                  <button class="pill-btn pill-ghost" :disabled="i === 0" @click="operator.skipTicket(ticket.id)">{{ t('queue.skip') }}</button>
                 </td>
               </tr>
             </tbody>
@@ -154,6 +172,7 @@ const subtitle = computed(() =>
 </template>
 
 <style scoped>
+.op-action-error { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; padding: 0.7rem 0.9rem; border-radius: 10px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem; }
 .tbtn { padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all .15s; }
 .tbtn:disabled { opacity: .4; cursor: not-allowed; }
 .tbtn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--text-muted); }

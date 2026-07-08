@@ -2,10 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/iam/application/auth.store.js'
 
 // 1. Usamos las propiedades booleanas de tu clase User
+// El admin comparte el panel del supervisor (superconjunto de permisos).
 function homeByRole(user) {
   if (!user) return '/login'
   if (user.isOperator) return '/operator'
-  if (user.isSupervisor) return '/supervisor'
+  if (user.isSupervisor || user.role === 'admin' || user.rol === 'admin') return '/supervisor'
   return '/citizen' // Por defecto, si no es ninguno de los anteriores
 }
 
@@ -169,7 +170,9 @@ function readStoredRouteUser() {
 
 router.beforeEach((to) => {
   const user = readStoredRouteUser()
-  const role = user?.role?.toLowerCase() // 'operator', 'supervisor', o 'citizen'
+  const rawRole = user?.role?.toLowerCase() // 'operator', 'supervisor', 'admin' o 'citizen'
+  // El admin usa el mismo panel administrativo que el supervisor.
+  const role = rawRole === 'admin' ? 'supervisor' : rawRole
 
   // 1. Si la ruta requiere autenticación y no hay usuario, al login
   if (to.meta.requiresAuth && !user) {
